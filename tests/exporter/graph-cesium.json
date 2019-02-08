@@ -1,0 +1,10 @@
+{"graph":
+    {"name": "users-on-issues",
+     "params": {"project": "cesium",
+                "repo": "repo_cesium",
+                "issuetracker": "cesium_it",
+                "nodecolor": "random",
+                "edgecolor": "black",
+                "type": "undirected"}
+     }
+}

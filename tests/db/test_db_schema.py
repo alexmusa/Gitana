@@ -28,7 +28,6 @@ def test_create_db_parts():
 
     g.init_db("dbschema_test", init_forum=False, init_instant_messaging=False, init_issue_tracker=False)
 
-
 def test_list_projects():
     g = Gitana(CONFIG)
     g.list_projects("db_2048")
@@ -47,12 +46,20 @@ def test_add_repository():
     g.create_repository("dbschema_test", "1", "11")
 
 
+def test_add_user_alias():
+    g = Gitana(CONFIG)
+    g.delete_previous_logs()
+    #g.join_user_identity("db_2048", "TimPetricola", "tim.petricola@gmail.com", "leereilly", "lee@github.com")
+    g.match_user_identity("db_2048", "gabrielecirulli", None, "Gabriele Cirulli", "gabrycir@gmail.com")
+
+
 def main():
-    # test_create_db()
-    test_create_db_parts()
-    # test_list_projects()
-    # test_add_project()
-    # test_add_repository()
+    #test_create_db()
+    #test_create_db_parts()
+    #test_list_projects()
+    #test_add_project()
+    #test_add_repository()
+    test_add_user_alias()
 
 
 if __name__ == "__main__":

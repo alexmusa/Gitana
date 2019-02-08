@@ -1,0 +1,9 @@
+{"report":
+    {"project": "cesium",
+     "time_span": "this_year",
+     "repo_activity": {"names": ["repo_cesium"],
+                       "measures": ["#commits", "#repo-users"]},
+     "issue_tracker_activity": {"names": ["cesium_it"],
+                                "measures": ["#issues-open", "#issues-closed", "#issue-tracker-users"]}
+     }
+}
