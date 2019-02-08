@@ -4,6 +4,7 @@ __author__ = 'valerio cosentino'
 
 import calendar
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 
 class DateUtil():
@@ -79,11 +80,77 @@ class DateUtil():
         """
         flag = True
         try:
-            datetime.strptime(str(s), format)
+            self.get_datetime_from_string(s, format())
         except:
             flag = False
-        finally:
-            return flag
+
+        return flag
+
+    def get_datetime_from_string(self, target_time, format):
+        """
+        gets datetime Object from string
+
+        :type target_time: str
+        :param target_time: creation time
+
+        :type format: str
+        :param format: datetime format (e.g, YYYY-mm-dd)
+        """
+        try:
+            time = datetime.strptime(str(target_time), format)
+        except:
+            time = None
+
+        return time
+
+    def get_string_from_datetime(self, target_time, format):
+        """
+        gets string from datetime Object
+
+        :type target_time: datetime Object
+        :param target_time: creation time
+
+        :type format: str
+        :param format: datetime format (e.g, YYYY-mm-dd)
+        """
+        try:
+            time = target_time.strftime(format)
+        except:
+            time = None
+
+        return time
+
+    def increment_date(self, target_time, unit=None, increment=None):
+        """
+        increments a datetime Object with a given amount of time
+
+        :type target_time: datetime Object
+        :param target_time: target time to increment
+
+        :type unit: str
+        :param unit: unit of time (year, month, week, day). Default one is month
+
+        :type increment: int
+        :param increment: amount of time. By default is 3
+        """
+        if unit:
+            digested = unit.lower()
+        else:
+            digested = "month"
+
+        if not increment:
+            increment = 3
+
+        if digested == "year":
+            incremented_target = target_time + relativedelta(years=increment)
+        elif digested == "week":
+            incremented_target = target_time + relativedelta(weeks=increment)
+        elif digested == "day":
+            incremented_target = target_time + relativedelta(days=increment)
+        else:
+            incremented_target = target_time + relativedelta(months=increment)
+
+        return incremented_target
 
     def get_time_fromtimestamp(self, creation_time, format):
         """
