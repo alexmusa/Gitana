@@ -3,9 +3,8 @@
 __author__ = 'valerio cosentino'
 
 """
-Gitana imports and digests the data of Git repositories, issue trackers, Q&A web-sites and
-Instant messaging services to a relational database in order to ease browsing and querying
-activities with standard SQL syntax and tools. It also provides support
+Gitana imports and digests the data of Git repositories, issue trackers, Q&A web-sites and Instant messaging services to a relational database
+in order to ease browsing and querying activities with standard SQL syntax and tools. It also provides support
 to generate project activity reports and perform complex network analysis.
 """
 
@@ -15,19 +14,24 @@ import glob
 from importers.db.dbschema import DbSchema
 from importers.vcs.git.git2db_extract_main import Git2DbMain
 from importers.vcs.git.git2db_update import Git2DbUpdate
+from importers.vcs.git.code2db_extract_main import Code2DbMain
+from importers.vcs.git.code2db_update import Code2DbUpdate
 from importers.issue_tracker.bugzilla.issue2db_extract_main import BugzillaIssue2DbMain
 from importers.issue_tracker.bugzilla.issue2db_update import BugzillaIssue2DbUpdate
 from importers.issue_tracker.github.issue2db_extract_main import GitHubIssue2DbMain
 from importers.issue_tracker.github.issue2db_update import GitHubIssue2DbUpdate
+from importers.issue_tracker.github.pr2db_extract_main import GitHubPullRequest2DbMain
 from importers.forum.eclipse.forum2db_extract_main import EclipseForum2DbMain
 from importers.forum.eclipse.forum2db_update import EclipseForum2DbUpdate
 from importers.forum.stackoverflow.stackoverflow2db_extract_main import StackOverflow2DbMain
 from importers.forum.stackoverflow.stackoverflow2db_update import StackOverflow2DbUpdate
 from importers.instant_messaging.slack.slack2db_extract_main import Slack2DbMain
 from importers.instant_messaging.slack.slack2db_update import Slack2DbUpdate
-from importers.dependencies.extract_relations import DependencyExtractor
 from exporters.report.report_exporter import ActivityReportExporter
 from exporters.graph.graph_exporter import GraphExporter
+from exporters.json.json_exporter import FileJsonExporter
+from util.github_util import GitHubUtil
+from util.file_util import FileUtilWrapper
 
 
 class Gitana():
@@ -186,8 +190,7 @@ class Gitana():
         for p in projects:
             print(p)
 
-    def import_git_data(self, db_name, project_name, repo_name, git_repo_path, import_type=1,
-                        references=None, before_date=None, processes=5):
+    def import_git_data(self, db_name, project_name, repo_name, git_repo_path, import_type=1, references=None, before_date=None, processes=5):
         """
         imports Git data to the DB
 
@@ -204,14 +207,10 @@ class Gitana():
         :param git_repo_path: the local path of the repository. It cannot be null
 
         :type import_type: int
-        :param import_type:
-               1 = do not import patch content,
-               2 = import patch content but not at line level,
-               3 = import patch content at line level, the default type will be 1
+        :param import_type: 1 = do not import patch content, 2 = import patch content but not at line level, 3 = import patch content at line level, the default type will be 1
 
         :type references: list str
-        :param references: list of references (branches and tags) to import.
-               It can be null or ["ref-name-1", .., "ref-name-n"]
+        :param references: list of references (branches and tags) to import. It can be null or ["ref-name-1", .., "ref-name-n"]
 
         :type before_date: str
         :param before_date: import data before date (YYYY-mm-dd). It can be null
@@ -220,9 +219,42 @@ class Gitana():
         :param processes: number of processes to import the data. If null, the default number of processes is used (5)
         """
         git2db = Git2DbMain(db_name, project_name,
-                            repo_name, git_repo_path, before_date, import_type, references, processes,
-                            self._config, self._log_path)
+            repo_name, git_repo_path, before_date, import_type, references, processes,
+            self._config, self._log_path)
         git2db.extract()
+
+    def import_code_data(self, db_name, project_name, repo_name, git_repo_path, import_type=1, extensions=None, references=None, processes=10):
+        """
+        imports code function data to the DB
+
+        :type db_name: str
+        :param db_name: the name of an existing DB
+
+        :type project_name: str
+        :param project_name: the name of an existing project in the DB
+
+        :type repo_name: str
+        :param repo_name: the name of the repository to import. It cannot be null
+
+        :type git_repo_path: str
+        :param git_repo_path: the local path of the repository. It cannot be null
+
+        :type import_type: int
+        :param import_type: 1 = import overall function statistics per file, 2 = import function-level information
+
+        :type extensions: list str
+        :param extensions: list of extensions. Currently extensions supported: ['java', 'py', 'php', 'scala', 'js', 'rb', 'cs', 'cpp', 'c']
+
+        :type references: list str
+        :param references: list of refs to analyse. It can be null or ["ref-name-1", .., "ref-name-n"]
+
+        :type processes: int
+        :param processes: number of processes to import the data. If null, the default number of processes is used (10)
+        """
+        code2db = Code2DbMain(db_name, project_name,
+            repo_name, git_repo_path, import_type, extensions, references, processes,
+            self._config, self._log_path)
+        code2db.extract()
 
     def update_git_data(self, db_name, project_name, repo_name, git_repo_path, before_date=None, processes=5):
         """
@@ -247,12 +279,38 @@ class Gitana():
         :param processes: number of processes to import the data. If null, the default number of processes is used (5)
         """
         git2db = Git2DbUpdate(db_name, project_name,
-                              repo_name, git_repo_path, before_date, processes,
-                              self._config, self._log_path)
+            repo_name, git_repo_path, before_date, processes,
+            self._config, self._log_path)
         git2db.update()
 
-    def import_bugzilla_issue_data(self, db_name, project_name, repo_name, issue_tracker_name, url, product,
-                                   before_date=None, processes=3):
+    def update_code_data(self, db_name, project_name, repo_name, git_repo_path, extensions=None, processes=10):
+        """
+        updates the code data stored in the DB
+
+        :type db_name: str
+        :param db_name: the name of an existing DB
+
+        :type project_name: str
+        :param project_name: the name of an existing project in the DB
+
+        :type repo_name: str
+        :param repo_name: the name of an existing repository in the DB to update
+
+        :type git_repo_path: str
+        :param git_repo_path: the path of the repository. It cannot be null
+
+        :type extensions: list str
+        :param extensions: list of extensions. Currently extensions supported: ['java', 'py', 'php', 'scala', 'js', 'rb', 'cs', 'cpp', 'c']
+
+        :type processes: int
+        :param processes: number of processes to import the data. If null, the default number of processes is used (10)
+        """
+        code2db = Code2DbUpdate(db_name, project_name,
+            repo_name, git_repo_path, extensions, processes,
+            self._config, self._log_path)
+        code2db.update()
+
+    def import_bugzilla_issue_data(self, db_name, project_name, repo_name, issue_tracker_name, url, product, before_date=None, processes=3):
         """
         imports Bugzilla issue data to the DB
 
@@ -286,8 +344,7 @@ class Gitana():
             self._config, self._log_path)
         issue2db.extract()
 
-    def update_bugzilla_issue_data(self, db_name, project_name, repo_name, issue_tracker_name, url, product,
-                                   processes=3):
+    def update_bugzilla_issue_data(self, db_name, project_name, repo_name, issue_tracker_name, url, product, processes=3):
         """
         updates the Bugzilla issue data stored in the DB
 
@@ -317,8 +374,7 @@ class Gitana():
             product, processes, self._config, self._log_path)
         issue2db.update()
 
-    def import_eclipse_forum_data(self, db_name, project_name, forum_name, eclipse_forum_url,
-                                  before_date=None, processes=2):
+    def import_eclipse_forum_data(self, db_name, project_name, forum_name, eclipse_forum_url, before_date=None, processes=2):
         """
         imports Eclipse forum data to the DB
 
@@ -466,8 +522,7 @@ class Gitana():
             self._config, self._log_path)
         slack2db.update()
 
-    def import_github_issue_data(self, db_name, project_name, repo_name, issue_tracker_name,
-                                 github_repo_full_name, tokens, before_date=None):
+    def import_github_issue_data(self, db_name, project_name, repo_name, issue_tracker_name, github_repo_full_name, tokens, before_date=None):
         """
         imports GitHub issue data to the DB
 
@@ -497,8 +552,7 @@ class Gitana():
             github_repo_full_name, before_date, tokens, self._config, self._log_path)
         github2db.extract()
 
-    def update_github_issue_data(self, db_name, project_name, repo_name, issue_tracker_name,
-                                 github_repo_full_name, tokens):
+    def update_github_issue_data(self, db_name, project_name, repo_name, issue_tracker_name, github_repo_full_name, tokens):
         """
         updates GitHub issue data stored in the DB
 
@@ -525,29 +579,54 @@ class Gitana():
             self._config, self._log_path)
         github2db.update()
 
-    def extract_dependency_relations(self, db_name, project_name, repo_name, git_repo_path,
-                                     git_references=[], extra_paths=[]):
+    def import_github_pull_request_data(self, db_name, project_name, repo_name, issue_tracker_name, github_repo_full_name, tokens, before_date=None):
         """
-        :param db_name: the name of an existing DB. It cannot be null
+        imports GitHub pull request data to the DB
+
         :type db_name: str
+        :param db_name: the name of an existing DB
 
         :type project_name: str
         :param project_name: the name of an existing project in the DB
 
-        :param repo_name: the name of an existing repository in the DB. It cannot be null
         :type repo_name: str
+        :param repo_name: the name of an existing repository in the DB
 
-        :param git_repo_path: the local path of the repository. It cannot be null
-        :type git_repo_path: str
+        :type issue_tracker_name: str
+        :param issue_tracker_name: the name of the issue tracker to import. It cannot be null
 
-        :param git_references: list of git references to load dependency info. By default all.
-        :type git_references: list
+        :type github_repo_full_name: str
+        :param github_repo_full_name: full name of the GitHub repository. It cannot be null
 
-        :param extra_paths: list of additional directory paths inside git repo to look for target files.
-        :type extra_paths: list
+        :type tokens: list str
+        :param tokens: list of GitHub tokens. It cannot be null
+
+        :type before_date: str
+        :param before_date: import data before date (YYYY-mm-dd). It can be null
         """
-        extractor = DependencyExtractor(self._config, db_name, project_name, repo_name, self._log_path)
-        extractor.load_dependencies(git_repo_path, git_references, extra_paths)
+        github2db = GitHubPullRequest2DbMain(
+            db_name, project_name, repo_name, Gitana.GITHUB_TYPE, issue_tracker_name, github_repo_full_name, before_date, tokens,
+            self._config, self._log_path)
+        github2db.extract()
+
+    def export_json(self, db_name, repo_name, output_path, references=None):
+        """
+        exports the file information stored in Gitana DB to JSON
+
+        :type db_name: str
+        :param db_name: the name of an existing DB
+
+        :type repo_name: str
+        :param repo_name: the name of an existing repository to analyse
+
+        :type output_path: str
+        :param output_path: the path where to export the json
+
+        :type references: list str
+        :param references: list of references to analyse
+        """
+        exporter = FileJsonExporter(self._config, db_name, self._log_path)
+        exporter.export(repo_name, references, output_path)
 
     def export_graph(self, db_name, settings_path, output_path):
         """
@@ -562,7 +641,7 @@ class Gitana():
         :type output_path: str
         :param output_path: the path where to export the graph
         """
-        exporter = GraphExporter(self._config, db_name, self._log_path)
+        exporter = GraphExporter(db_name, self._config, self._log_path)
         exporter.export(output_path, settings_path)
 
     def export_activity_report(self, db_name, settings_path, output_path):
@@ -578,5 +657,98 @@ class Gitana():
         :type output_path: str
         :param output_path: the path where to export the report
         """
-        exporter = ActivityReportExporter(self._config, db_name, self._log_path)
+        exporter = ActivityReportExporter(db_name, self._config, self._log_path)
         exporter.export(output_path, settings_path)
+
+    def match_user_identity(self, db_name, source_user_name, source_target_name, target_user_name, target_user_email):
+        """
+        matchs the identity of a user to another one. This function is useful when a single user has multiple identities in the project.
+        Note that a user can be matched only to another identity
+
+        :type db_name: str
+        :param db_name: the name of an existing DB
+
+        :type source_user_name: str
+        :param source_user_name: the name of the source user
+
+        :type source_target_name: str
+        :param source_target_name: the email of the source user
+
+        :type target_user_name: str
+        :param target_user_name: the name of the target user
+
+        :type target_user_email: str
+        :param target_user_email: the email of the target user
+        """
+        db = DbSchema(db_name, self._config, self._log_path)
+        db.match_user_identity(source_user_name, source_target_name, target_user_name, target_user_email)
+
+    def match_vcs_and_github_users(self, db_name, project_name, repo_name, github_repo_full_name, tokens):
+        """
+        matchs the user identities in the vcs system with the GitHub user credentials
+
+        :type db_name: str
+        :param db_name: the name of an existing DB
+
+        :type project_name: str
+        :param project_name: the name of an existing project in the DB
+
+        :type repo_name: str
+        :param repo_name: the name of an existing repository in the DB
+
+        :type github_repo_full_name: str
+        :param github_repo_full_name: full name of the GitHub repository. It cannot be null
+
+        :type tokens: list str
+        :param tokens: list of GitHub tokens. It cannot be null
+        """
+        github_util = GitHubUtil(db_name, project_name, repo_name, github_repo_full_name, tokens,
+                                 self._config, self._log_path)
+        github_util.match()
+
+    def get_file_history(self, db_name, repo_name, file_name, reference_name, reversed=False, before_date=None):
+        """
+        retrieves the history of file for a given branch and optionally before a given date
+
+        :type db_name: str
+        :param db_name: the name of an existing DB
+
+        :type repo_name: str
+        :param repo_name: the name of an existing repository in the DB
+
+        :type file_name: str
+        :param file_name: name of the file to analyse
+
+        :type reference_name: str
+        :param reference_name: name of the reference to analyse
+
+        :type reversed: bool
+        :param reversed: if True, it returns the changes from the most recent to the earliest
+
+        :type before_date: str (YYYY-mm-dd)
+        :param before_date: if not null, it returns the file history before the given date
+        """
+        wrapper = FileUtilWrapper(db_name, self._config, self._log_path)
+        return wrapper.get_file_history(repo_name, file_name, reference_name, reversed, before_date)
+
+    def get_file_version(self, db_name, repo_name, file_name, reference_name, before_date=None):
+        """
+        retrieves the version of file for a given branch and optionally before a given date
+
+        :type db_name: str
+        :param db_name: the name of an existing DB
+
+        :type repo_name: str
+        :param repo_name: the name of an existing repository in the DB
+
+        :type file_name: str
+        :param file_name: name of the file to analyse
+
+        :type reference_name: str
+        :param reference_name: name of the reference to analyse
+
+        :type before_date: str (YYYY-mm-dd)
+        :param before_date: if not null, it returns the file version before the given date
+        """
+        wrapper = FileUtilWrapper(db_name, self._config, self._log_path)
+        return wrapper.get_file_version(repo_name, file_name, reference_name, before_date)
