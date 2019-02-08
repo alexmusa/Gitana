@@ -18,85 +18,70 @@ mechanisms between them to enable a complete project analysis. Gitana provides a
 To ensure efficiency, our approach comes with an incremental propagation mechanism that refreshes the database content
 with the latest modifications available on the data sources.
 
-
 Requirements
 ------------
 Gitana is developed on Windows 7 and it relies on:
 
-	`Git 2.9.3 <https://git-scm.com/downloads>`_
-	
-	`MySQL Server 5.6 <http://dev.mysql.com/downloads/installer/>`_
-	
-	`Python 2.7.6 <https://www.python.org/downloads/windows/>`_
+    Python 2.7.6
 
-Python and pip package manager can be set to be executed from Windows command line by adding to the Path environment variable
-the paths where Python and its scripts are installed. By default, these paths are:
+    MySQL Server 5.6 (http://dev.mysql.com/downloads/installer/)
 
-.. code-block:: bash
-	
-	C:\Python27
-	C:\Python27\Scripts
-
-
-Installation
-------------
-Installation of Gitana is achieved by executing the setup script.
-
-.. code-block:: bash
-
-    $> cd <...>/Gitana
-    $> python setup.py build
-    $> python setup.py install
-
+Download and install
+--------------------
+After installing MySQL Server and Python 2.7.6, execute the setup.py script
 
 Licensing
 --------------------
 Gitana is distributed under the MIT License (https://opensource.org/licenses/MIT)
 
-How to use Gitana
+Example of import
 -----------------
-Gitana is developed and tested on Windows, thus the user mileage in other platforms may vary.
-Nevertheless, Gitana has been successfully executed on Linux (i.e., all its exporters and Git, GitHub, StackOverflow, Bugzilla importers).
+.. code-block:: python
 
+   from gitana import Gitana
 
+   CONFIG = {
+				'user': 'root',
+				'password': 'root',
+				'host': 'localhost',
+				'port': '3306',
+				'raise_on_warnings': False,
+				'buffered': True
+			}
+
+   def main():
+        g = Gitana(CONFIG, None)
+        g.init_db("papyrus_db")
+
+        g.create_project("papyrus_db", "papyrus")
+
+        g.import_git_data("papyrus_db", "papyrus", "papyrus_repo", "...\\Desktop\\org.eclipse.papyrus", None, 1, None, 10)
+        g.import_bugzilla_tracker_data("papyrus_db", "papyrus", "papyrus_repo", "papyrus-bugzilla", "https://bugs.eclipse.org/bugs/xmlrpc.cgi", "papyrus", None, 5)
+        g.import_eclipse_forum_data("papyrus_db", "papyrus", "papyrus-forum", "https://www.eclipse.org/forums/index.php/f/121/", None, False, 5)
+        g.import_stackoverflow_data("papyrus_db", "papyrus", "papyrus-so", "papyrus", None, ['YOUR-TOKEN-1', 'YOUR-TOKEN-2', ...])
+
+   if __name__ == "__main__":
+        main()
+	
+Example of export
+-----------------
 .. code-block:: python
 
    from gitana.gitana import Gitana
 
-    CONFIG = {
-                'user': 'root',
-                'password': 'root',
-                'host': 'localhost',
-                'port': '3306',
-                'raise_on_warnings': False,
-                'buffered': True
-            }
+   CONFIG = {
+				'user': 'root',
+				'password': 'root',
+				'host': 'localhost',
+				'port': '3306',
+				'raise_on_warnings': False,
+				'buffered': True
+			}
 
-    def main():
-        g = Gitana(CONFIG)
+   def main():
+        g = Gitana(CONFIG, None)
+        g.export_to_graph("_papyrus_db", "./graph.json", "./graph.gexf")
+        g.export_to_report("_papyrus_db", "./report.json", "./report.html")
 
-        g.init_db("papyrus_db")
-        g.create_project("papyrus_db", "papyrus")
-
-        # import
-        g.import_git_data("papyrus_db", "papyrus", "papyrus_repo",
-                          "...\\Desktop\\org.eclipse.papyrus")
-        g.import_bugzilla_issue_data("papyrus_db", "papyrus", "papyrus_repo",
-                                     "bugzilla-papyrus",
-                                     "https://bugs.eclipse.org/bugs/xmlrpc.cgi",
-                                     "papyrus")
-        g.import_eclipse_forum_data("papyrus_db", "papyrus", "papyrus-forum",
-                                    "https://www.eclipse.org/forums/index.php/f/121/")
-        g.import_stackoverflow_data("papyrus_db", "papyrus", "papyrus-so",
-                                    ['YOUR-TOKEN-1', 'YOUR-TOKEN-2', ...])
-        g.extract_dependency_relations("papyrus_db", "papyrus", "papyrus_repo",
-                                       "...\\Desktop\\org.eclipse.papyrus")
-
-        # export
-        g.export_graph("papyrus_db", "./graph.json", "./graph.gexf")
-        g.export_activity_report("papyrus_db",
-        "./report.json", "./report.html")
-
-        if __name__ == "__main__":
-            main()
-
+   if __name__ == "__main__":
+        main()

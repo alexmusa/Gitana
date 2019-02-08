@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>importers.vcs.git.git_dao &#8212; Gitana 1.0.1 documentation</title>
+    <title>importers.vcs.git.git_dao &#8212; Gitana 1.0 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '1.0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -53,6 +53,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class handles the persistence and retrieval of Git data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -215,11 +216,11 @@
 <span class="sd">        :type user_name: str</span>
 <span class="sd">        :param user_name: name of the user</span>
 
-<span class="sd">        :type user_email: str</span>
-<span class="sd">        :param user_email: email of the user</span>
+<span class="sd">        :type user_name: str</span>
+<span class="sd">        :param user_name: email of the user</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">user_email</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">user_name</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">user_email</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">user_name</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">user_name</span> <span class="o">=</span> <span class="s2">&quot;uknonwn_user&quot;</span>
             <span class="n">user_email</span> <span class="o">=</span> <span class="s2">&quot;uknonwn_user&quot;</span>
 
@@ -300,8 +301,7 @@
 
         <span class="k">if</span> <span class="n">to_insert</span><span class="p">:</span>
             <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO commit_parent(repo_id, commit_id, commit_sha, parent_id, parent_sha) &quot;</span> \
-                    <span class="s2">&quot;VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO commit_parent(repo_id, commit_id, commit_sha, parent_id, parent_sha) VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
             <span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">to_insert</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
             <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
@@ -419,7 +419,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GitDao.insert_file_renamed"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.insert_file_renamed">[docs]</a>    <span class="k">def</span> <span class="nf">insert_file_renamed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">,</span> <span class="n">current_file_id</span><span class="p">,</span> <span class="n">previous_file_id</span><span class="p">,</span> <span class="n">file_modification_id</span><span class="p">):</span>
+<div class="viewcode-block" id="GitDao.insert_file_renamed"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.insert_file_renamed">[docs]</a>    <span class="k">def</span> <span class="nf">insert_file_renamed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">,</span> <span class="n">current_file_id</span><span class="p">,</span> <span class="n">previous_file_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        inserts file renamed information</span>
 
@@ -431,20 +431,17 @@
 
 <span class="sd">        :type previous_file_id: int</span>
 <span class="sd">        :param previous_file_id: id of the file before renaming</span>
-
-<span class="sd">        :type file_modification_id: int</span>
-<span class="sd">        :param file_modification_id: id of the file modification</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
         <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO file_renamed &quot;</span> \
-                <span class="s2">&quot;VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
-        <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">current_file_id</span><span class="p">,</span> <span class="n">previous_file_id</span><span class="p">,</span> <span class="n">file_modification_id</span><span class="p">]</span>
+                <span class="s2">&quot;VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">current_file_id</span><span class="p">,</span> <span class="n">previous_file_id</span><span class="p">]</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GitDao.insert_file"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.insert_file">[docs]</a>    <span class="k">def</span> <span class="nf">insert_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GitDao.insert_file"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.insert_file">[docs]</a>    <span class="k">def</span> <span class="nf">insert_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ext</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        inserts file</span>
 
@@ -460,11 +457,6 @@
         <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO file &quot;</span> \
                 <span class="s2">&quot;VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
-
-        <span class="c1"># extract file extension from file path if not passed</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span><span class="p">:</span>
-            <span class="n">ext</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
         <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ext</span><span class="p">]</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -487,8 +479,7 @@
         <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT DISTINCT f.id &quot;</span> \
                 <span class="s2">&quot;FROM file f JOIN file_modification fm ON f.id = fm.file_id &quot;</span> \
                 <span class="s2">&quot;JOIN commit c ON c.id = fm.commit_id &quot;</span> \
-                <span class="s2">&quot;WHERE f.name = </span><span class="si">%s</span><span class="s2"> AND f.repo_id = </span><span class="si">%s</span><span class="s2"> AND fm.status = &#39;added&#39; &quot;</span> \
-                <span class="s2">&quot;AND c.authored_date &lt;= &#39;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">before_date</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39; &quot;</span>
+                <span class="s2">&quot;WHERE f.name = </span><span class="si">%s</span><span class="s2"> AND f.repo_id = </span><span class="si">%s</span><span class="s2"> AND fm.status = &#39;added&#39; AND c.authored_date &lt;= &#39;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">before_date</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39; &quot;</span>
         <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">]</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
@@ -531,8 +522,8 @@
 <span class="sd">        :type ref_name: str</span>
 <span class="sd">        :param ref_name: name of the reference</span>
 
-<span class="sd">        :type ref_type: str</span>
-<span class="sd">        :param ref_type: type of the reference (branch or tag)</span>
+<span class="sd">        :type ref_name: str</span>
+<span class="sd">        :param ref_name: type of the reference (branch or tag)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO reference &quot;</span> \
@@ -626,6 +617,138 @@
         <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO commit &quot;</span> \
                 <span class="s2">&quot;VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
         <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">,</span> <span class="n">sha</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">author_id</span><span class="p">,</span> <span class="n">committer_id</span><span class="p">,</span> <span class="n">authored_date</span><span class="p">,</span> <span class="n">committed_date</span><span class="p">,</span> <span class="n">size</span><span class="p">]</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GitDao.select_function_id"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.select_function_id">[docs]</a>    <span class="k">def</span> <span class="nf">select_function_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_id</span><span class="p">,</span> <span class="n">start_line</span><span class="p">,</span> <span class="n">end_line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        select DB function id</span>
+
+<span class="sd">        :type file_id: int</span>
+<span class="sd">        :param file_id: id of the file</span>
+
+<span class="sd">        :type start_line: int</span>
+<span class="sd">        :param start_line: line number where the function starts</span>
+
+<span class="sd">        :type end_line: int</span>
+<span class="sd">        :param end_line: line number where the function ends</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT id &quot;</span> \
+                <span class="s2">&quot;FROM function &quot;</span> \
+                <span class="s2">&quot;WHERE file_id = </span><span class="si">%s</span><span class="s2"> AND start_line = </span><span class="si">%s</span><span class="s2"> AND end_line = </span><span class="si">%s</span><span class="s2">&quot;</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">file_id</span><span class="p">,</span> <span class="n">start_line</span><span class="p">,</span> <span class="n">end_line</span><span class="p">]</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">row</span><span class="p">:</span>
+            <span class="n">found</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">found</span></div>
+
+<div class="viewcode-block" id="GitDao.insert_code_in_reference"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.insert_code_in_reference">[docs]</a>    <span class="k">def</span> <span class="nf">insert_code_in_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_id</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">,</span> <span class="n">ccn</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">comments</span><span class="p">,</span> <span class="n">blanks</span><span class="p">,</span> <span class="n">funs</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">avg_ccn</span><span class="p">,</span> <span class="n">avg_loc</span><span class="p">,</span> <span class="n">avg_tokens</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inserts file complexity to DB</span>
+
+<span class="sd">        :type file_id: int</span>
+<span class="sd">        :param file_id: id of the file</span>
+
+<span class="sd">        :type tag_id: int</span>
+<span class="sd">        :param tag_id: id of the tag reference</span>
+
+<span class="sd">        :type ccn: int</span>
+<span class="sd">        :param ccn: cyclomatic complexity value</span>
+
+<span class="sd">        :type loc: int</span>
+<span class="sd">        :param loc: lines of code</span>
+
+<span class="sd">        :type comments: int</span>
+<span class="sd">        :param comments: commented lines</span>
+
+<span class="sd">        :type blanks: int</span>
+<span class="sd">        :param blanks: blank lines</span>
+
+<span class="sd">        :type funs: int</span>
+<span class="sd">        :param funs: number of functions</span>
+
+<span class="sd">        :type tokens: int</span>
+<span class="sd">        :param tokens: tokens in the files</span>
+
+<span class="sd">        :type avg_ccn: int</span>
+<span class="sd">        :param avg_ccn: file avg cyclomatic complexity (per function)</span>
+
+<span class="sd">        :type avg_loc: int</span>
+<span class="sd">        :param avg_loc: file avg lines of code (per function)</span>
+
+<span class="sd">        :type avg_tokens: int</span>
+<span class="sd">        :param avg_tokens: file avg number of tokens (per function)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO code_in_ref &quot;</span> \
+                <span class="s2">&quot;VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">file_id</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">,</span> <span class="n">ccn</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">comments</span><span class="p">,</span> <span class="n">blanks</span><span class="p">,</span> <span class="n">funs</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">avg_ccn</span><span class="p">,</span> <span class="n">avg_loc</span><span class="p">,</span> <span class="n">avg_tokens</span><span class="p">]</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GitDao.insert_function"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.insert_function">[docs]</a>    <span class="k">def</span> <span class="nf">insert_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function_name</span><span class="p">,</span> <span class="n">file_id</span><span class="p">,</span> <span class="n">num_arguments</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">total_lines</span><span class="p">,</span> <span class="n">ccn</span><span class="p">,</span> <span class="n">start_line</span><span class="p">,</span> <span class="n">end_line</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inserts function to DB</span>
+
+<span class="sd">        :type function_name: str</span>
+<span class="sd">        :param function_name: name of the function</span>
+
+<span class="sd">        :type file_id: int</span>
+<span class="sd">        :param file_id: id of the file</span>
+
+<span class="sd">        :type num_arguments: int</span>
+<span class="sd">        :param num_arguments: number of arguments</span>
+
+<span class="sd">        :type loc: int</span>
+<span class="sd">        :param loc: lines of code</span>
+
+<span class="sd">        :type tokens: int</span>
+<span class="sd">        :param tokens: tokens in the function</span>
+
+<span class="sd">        :type total_lines: int</span>
+<span class="sd">        :param total_lines: number of lines (loc + comments + empty lines)</span>
+
+<span class="sd">        :type ccn: int</span>
+<span class="sd">        :param ccn: cyclomatic complexity of the function</span>
+
+<span class="sd">        :type start_line: int</span>
+<span class="sd">        :param start_line: line number where the function starts</span>
+
+<span class="sd">        :type end_line: int</span>
+<span class="sd">        :param end_line: line number where the function ends</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO function &quot;</span> \
+                <span class="s2">&quot;VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">function_name</span><span class="p">,</span> <span class="n">file_id</span><span class="p">,</span> <span class="n">num_arguments</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">tokens</span><span class="p">,</span> <span class="n">total_lines</span><span class="p">,</span> <span class="n">ccn</span><span class="p">,</span> <span class="n">start_line</span><span class="p">,</span> <span class="n">end_line</span><span class="p">]</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GitDao.insert_function_in_reference"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.insert_function_in_reference">[docs]</a>    <span class="k">def</span> <span class="nf">insert_function_in_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fun_id</span><span class="p">,</span>  <span class="n">tag_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        inserts link between a function and the tag reference</span>
+
+<span class="sd">        :type fun_id: int</span>
+<span class="sd">        :param fun_id: id of the function</span>
+
+<span class="sd">        :type ref_id: int</span>
+<span class="sd">        :param ref_id: id of the tag</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT IGNORE INTO function_in_ref &quot;</span> \
+                <span class="s2">&quot;VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
+        <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">fun_id</span><span class="p">,</span> <span class="n">tag_id</span><span class="p">]</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
         <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
@@ -777,7 +900,71 @@
         <span class="k">if</span> <span class="n">row</span><span class="p">:</span>
             <span class="n">found</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">found</span></div></div>
+        <span class="k">return</span> <span class="n">found</span></div>
+
+<div class="viewcode-block" id="GitDao.delete_from_function_table"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.delete_from_function_table">[docs]</a>    <span class="k">def</span> <span class="nf">delete_from_function_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref_ids</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        delete all data from the table function for a set of given references, if possible.</span>
+<span class="sd">        A function is deleted if there are no other references where the function is present.</span>
+
+<span class="sd">        :type ref_ids: list int</span>
+<span class="sd">        :param ref_ids: reference ids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cursor_find_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT to_delete.file_id &quot;</span> \
+                         <span class="s2">&quot;FROM ( SELECT fun.file_id FROM code_in_ref cir JOIN function fun ON cir.file_id = fun.file_id &quot;</span> \
+                         <span class="s2">&quot;WHERE ref_id IN ( &quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ref_ids</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;) &quot;</span> \
+                         <span class="s2">&quot;GROUP BY fun.file_id) AS to_delete &quot;</span> \
+                         <span class="s2">&quot;LEFT JOIN &quot;</span> \
+                         <span class="s2">&quot;(SELECT fun.file_id FROM code_in_ref cir &quot;</span> \
+                         <span class="s2">&quot;JOIN function fun ON cir.file_id = fun.file_id &quot;</span> \
+                         <span class="s2">&quot;WHERE ref_id NOT IN ( &quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ref_ids</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;) &quot;</span> \
+                         <span class="s2">&quot;GROUP BY fun.file_id) AS other_files &quot;</span> \
+                         <span class="s2">&quot;ON other_files.file_id = to_delete.file_id &quot;</span> \
+                         <span class="s2">&quot;WHERE other_files.file_id IS NULL&quot;</span>
+        <span class="n">cursor_find_files</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">cursor_find_files</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">row</span><span class="p">:</span>
+            <span class="n">file_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM function WHERE file_id = </span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">file_id</span><span class="p">]</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">arguments</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">row</span> <span class="o">=</span> <span class="n">cursor_find_files</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+        <span class="n">cursor_find_files</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GitDao.delete_from_function_in_ref_table"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.delete_from_function_in_ref_table">[docs]</a>    <span class="k">def</span> <span class="nf">delete_from_function_in_ref_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref_ids</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        delete all data from the table function_in_ref for a set of given references</span>
+
+<span class="sd">        :type ref_ids: list int</span>
+<span class="sd">        :param ref_ids: reference ids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM function_in_ref WHERE ref_id IN (&quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ref_ids</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GitDao.delete_from_code_in_ref"><a class="viewcode-back" href="../../../../git.html#importers.vcs.git.git_dao.GitDao.delete_from_code_in_ref">[docs]</a>    <span class="k">def</span> <span class="nf">delete_from_code_in_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref_ids</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        delete all data from the table code_in_ref for a set of given references</span>
+
+<span class="sd">        :type ref_ids: list int</span>
+<span class="sd">        :param ref_ids: reference ids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM code_in_ref WHERE ref_id IN (&quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ref_ids</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cnx</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
 </pre></div>
 
           </div>

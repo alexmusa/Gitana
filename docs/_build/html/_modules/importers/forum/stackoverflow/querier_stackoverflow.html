@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>importers.forum.stackoverflow.querier_stackoverflow &#8212; Gitana 1.0.1 documentation</title>
+    <title>importers.forum.stackoverflow.querier_stackoverflow &#8212; Gitana 1.0 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '1.0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -72,9 +72,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span> <span class="o">=</span> <span class="n">logger</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span> <span class="o">=</span> <span class="n">TokenUtil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="p">,</span> <span class="s2">&quot;stackoverflow&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_date_util</span> <span class="o">=</span> <span class="n">DateUtil</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_so</span> <span class="o">=</span> <span class="n">stackexchange</span><span class="o">.</span><span class="n">Site</span><span class="p">(</span><span class="n">stackexchange</span><span class="o">.</span><span class="n">StackOverflow</span><span class="p">,</span> <span class="n">app_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_so</span><span class="o">.</span><span class="n">impose_throttling</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_so</span><span class="o">.</span><span class="n">throttle_stop</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_so</span> <span class="o">=</span> <span class="n">stackexchange</span><span class="o">.</span><span class="n">Site</span><span class="p">(</span><span class="n">stackexchange</span><span class="o">.</span><span class="n">StackOverflow</span><span class="p">,</span> <span class="n">app_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;StackOverflowQuerier init failed&quot;</span><span class="p">)</span>
             <span class="k">raise</span>
@@ -96,8 +94,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_so</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">before_date</span><span class="p">:</span>
-            <span class="n">questions</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">&lt;=</span>
-                         <span class="bp">self</span><span class="o">.</span><span class="n">_date_util</span><span class="o">.</span><span class="n">get_timestamp</span><span class="p">(</span><span class="n">before_date</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)]</span>
+            <span class="n">questions</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span> <span class="k">if</span> <span class="n">q</span><span class="o">.</span><span class="n">creation_date</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_date_util</span><span class="o">.</span><span class="n">get_timestamp</span><span class="p">(</span><span class="n">before_date</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)]</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="n">question</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">questions</span><span class="p">]</span></div>
 
@@ -142,41 +139,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">container</span><span class="o">.</span><span class="n">score</span></div>
 
-<div class="viewcode-block" id="StackOverflowQuerier.get_topic_labels"><a class="viewcode-back" href="../../../../stackoverflow.html#importers.forum.stackoverflow.querier_stackoverflow.StackOverflowQuerier.get_topic_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_topic_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        gets the topic labels</span>
-
-<span class="sd">        :type question: Object</span>
-<span class="sd">        :param question: the Object representing the question</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">labels</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">tags</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">return</span> <span class="n">labels</span></div>
-
 <div class="viewcode-block" id="StackOverflowQuerier.get_topic_views"><a class="viewcode-back" href="../../../../stackoverflow.html#importers.forum.stackoverflow.querier_stackoverflow.StackOverflowQuerier.get_topic_views">[docs]</a>    <span class="k">def</span> <span class="nf">get_topic_views</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        gets the topic view count</span>
 
-<span class="sd">        :type question: Object</span>
-<span class="sd">        :param question: the Object representing the question</span>
+<span class="sd">        :type container: Object</span>
+<span class="sd">        :param container: the Object representing the question</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">question</span><span class="o">.</span><span class="n">view_count</span></div>
 
-<div class="viewcode-block" id="StackOverflowQuerier.is_accepted_answer"><a class="viewcode-back" href="../../../../stackoverflow.html#importers.forum.stackoverflow.querier_stackoverflow.StackOverflowQuerier.is_accepted_answer">[docs]</a>    <span class="k">def</span> <span class="nf">is_accepted_answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">answer</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        checks if the answer is the accepted one</span>
-
-<span class="sd">        :type answer: Object</span>
-<span class="sd">        :param answer: the Object representing the answer</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">found</span> <span class="o">=</span> <span class="n">answer</span><span class="o">.</span><span class="n">accepted</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="k">return</span> <span class="n">found</span></div>
+    <span class="k">def</span> <span class="nf">is_accepted_answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">answer</span><span class="p">):</span>
+        <span class="c1">#TODO</span>
+        <span class="nb">print</span> <span class="s2">&quot;here&quot;</span>
 
 <div class="viewcode-block" id="StackOverflowQuerier.get_container_created_at"><a class="viewcode-back" href="../../../../stackoverflow.html#importers.forum.stackoverflow.querier_stackoverflow.StackOverflowQuerier.get_container_created_at">[docs]</a>    <span class="k">def</span> <span class="nf">get_container_created_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -321,6 +295,13 @@
 <span class="sd">        :param pos: position of the message where the attachment was found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">message_id</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span></div></div>
+
+
+
+
+
+
+
 </pre></div>
 
           </div>

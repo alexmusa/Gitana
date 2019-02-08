@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>importers.issue_tracker.github.querier_github &#8212; Gitana 1.0.1 documentation</title>
+    <title>importers.issue_tracker.github.querier_github &#8212; Gitana 1.0 documentation</title>
     
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../../',
-        VERSION:     '1.0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -47,6 +47,7 @@
 <span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;valerio cosentino&#39;</span>
 
 <span class="kn">from</span> <span class="nn">github</span> <span class="k">import</span> <span class="n">Github</span>
+<span class="kn">from</span> <span class="nn">github</span> <span class="k">import</span> <span class="n">GithubException</span>
 <span class="kn">from</span> <span class="nn">util.date_util</span> <span class="k">import</span> <span class="n">DateUtil</span>
 <span class="kn">from</span> <span class="nn">util.token_util</span> <span class="k">import</span> <span class="n">TokenUtil</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -81,13 +82,42 @@
             <span class="k">raise</span>
 
     <span class="k">def</span> <span class="nf">_load_repo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
-        <span class="c1"># connect to the GitHub API</span>
+        <span class="c1">#connect to the GitHub API</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">repo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="o">.</span><span class="n">get_repo</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">repo</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;GitHubQuerier error loading repository &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;- &quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;GitHubQuerier error loading repository &quot;</span> <span class="o">+</span> <span class="n">url</span> <span class="o">+</span> <span class="s2">&quot;- &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
             <span class="k">raise</span>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_ids"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">before_date</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets data source pull request ids</span>
+
+<span class="sd">        :type before_date: str</span>
+<span class="sd">        :param before_date: selects pull requests with creation date before a given date (YYYY-mm-dd)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pr_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">page_count</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+        <span class="n">last_page</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="o">.</span><span class="n">get_pulls</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">_getLastPageUrl</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;page=&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">while</span> <span class="n">page_count</span> <span class="o">!=</span> <span class="n">last_page</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+            <span class="n">pull_requests</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="o">.</span><span class="n">get_pulls</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_count</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pr</span> <span class="ow">in</span> <span class="n">pull_requests</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">before_date</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pr</span><span class="o">.</span><span class="n">created_at</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_date_util</span><span class="o">.</span><span class="n">get_timestamp</span><span class="p">(</span><span class="n">before_date</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">):</span>
+                        <span class="n">pr_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">pr_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+            <span class="n">page_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">pr_ids</span><span class="p">:</span>
+            <span class="n">pr_ids</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">pr_ids</span></div>
 
 <div class="viewcode-block" id="GitHubQuerier.get_issue_ids"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_issue_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_issue_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">before_date</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -128,6 +158,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="o">.</span><span class="n">get_issue</span><span class="p">(</span><span class="n">issue_id</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets pull request by its id</span>
+
+<span class="sd">        :type pr_id: int</span>
+<span class="sd">        :param pr_id: data source pr id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="o">.</span><span class="n">get_pull</span><span class="p">(</span><span class="n">pr_id</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="GitHubQuerier.get_issue_summary"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_issue_summary">[docs]</a>    <span class="k">def</span> <span class="nf">get_issue_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">issue</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        gets summary of the issue</span>
@@ -145,6 +185,34 @@
 <span class="sd">        :param issue: the Object representing the issue</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">issue</span><span class="o">.</span><span class="n">body</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_state"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets version of the pull request</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pr</span><span class="o">.</span><span class="n">state</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_base"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_base">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_base</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the name of the branch where the changes will be pulled into</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pr</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">ref</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_merged"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_merged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets whether the pull request has been merged or not</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pr</span><span class="o">.</span><span class="n">merged</span></div>
 
 <div class="viewcode-block" id="GitHubQuerier.get_issue_version"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_issue_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_issue_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">issue</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -204,6 +272,26 @@
 
         <span class="k">return</span> <span class="n">found</span></div>
 
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_commit_info"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commit_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_commit_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commit</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the information of a commit</span>
+
+<span class="sd">        :type commit: Object</span>
+<span class="sd">        :param commit: the Object representing the commit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">commit</span><span class="o">.</span><span class="n">commit</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_commit_stats"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commit_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_commit_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commit</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the stats (deletions, additions) of a commit</span>
+
+<span class="sd">        :type commit: Object</span>
+<span class="sd">        :param commit: the Object representing the commit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">commit</span><span class="o">.</span><span class="n">stats</span></div>
+
 <div class="viewcode-block" id="GitHubQuerier.get_user_name"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_user_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_user_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        gets the user name of the issue creator</span>
@@ -231,6 +319,75 @@
             <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">labels</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_commits"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commits">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_commits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the commits of a pull request</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">commits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pr</span><span class="o">.</span><span class="n">get_commits</span><span class="p">():</span>
+            <span class="n">commits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">commits</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_comments"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_comments">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the comments of a pull request</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">comments</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pr</span><span class="o">.</span><span class="n">get_review_comments</span><span class="p">():</span>
+            <span class="n">comments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">comments</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_author"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_author">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_author</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets pull request author</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pr</span><span class="o">.</span><span class="n">user</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_merged_at"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged_at">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_merged_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the date of a pull request merge</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pr</span><span class="o">.</span><span class="n">merged_at</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_merged_by"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged_by">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_merged_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the author of a pull request merge</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pr</span><span class="o">.</span><span class="n">merged_by</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_files"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the files of a pull request</span>
+
+<span class="sd">        :type pr: Object</span>
+<span class="sd">        :param pr: the Object representing the pull request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token_util</span><span class="o">.</span><span class="n">wait_is_usable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_github</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">pr</span><span class="o">.</span><span class="n">get_files</span><span class="p">():</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">files</span></div>
 
 <div class="viewcode-block" id="GitHubQuerier.get_issue_comments"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_issue_comments">[docs]</a>    <span class="k">def</span> <span class="nf">get_issue_comments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">issue</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -281,6 +438,15 @@
 <span class="sd">        :param issue_comment: the Object representing the issue comment</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">issue_comment</span><span class="o">.</span><span class="n">created_at</span></div>
+
+<div class="viewcode-block" id="GitHubQuerier.get_pull_request_commented_file"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commented_file">[docs]</a>    <span class="k">def</span> <span class="nf">get_pull_request_commented_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pr_comment</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        gets the file referred by the pull request comment</span>
+
+<span class="sd">        :type issue_comment: Object</span>
+<span class="sd">        :param issue_comment: the Object representing the pull request comment</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pr_comment</span><span class="o">.</span><span class="n">path</span></div>
 
 <div class="viewcode-block" id="GitHubQuerier.generate_attachment_id"><a class="viewcode-back" href="../../../../github.html#importers.issue_tracker.github.querier_github.GitHubQuerier.generate_attachment_id">[docs]</a>    <span class="k">def</span> <span class="nf">generate_attachment_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message_id</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>GitHub Issue Tracker &#8212; Gitana 1.0.1 documentation</title>
+    <title>GitHub Issue Tracker &#8212; Gitana 1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -93,6 +93,30 @@
 
 </dd></dl>
 
+<span class="target" id="module-importers.issue_tracker.github.pr2db_extract_main"></span><dl class="class">
+<dt id="importers.issue_tracker.github.pr2db_extract_main.GitHubPullRequest2DbMain">
+<em class="property">class </em><code class="descclassname">importers.issue_tracker.github.pr2db_extract_main.</code><code class="descname">GitHubPullRequest2DbMain</code><span class="sig-paren">(</span><em>db_name</em>, <em>project_name</em>, <em>repo_name</em>, <em>type</em>, <em>issue_tracker_name</em>, <em>url</em>, <em>before_date</em>, <em>tokens</em>, <em>config</em>, <em>log_root_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/pr2db_extract_main.html#GitHubPullRequest2DbMain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.pr2db_extract_main.GitHubPullRequest2DbMain" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class handles the import of GitHub pull request data</p>
+<dl class="method">
+<dt id="importers.issue_tracker.github.pr2db_extract_main.GitHubPullRequest2DbMain.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/pr2db_extract_main.html#GitHubPullRequest2DbMain.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.pr2db_extract_main.GitHubPullRequest2DbMain.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>extracts GitHub pull request data and stores it in the DB</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-importers.issue_tracker.github.pr2db_extract_pull_request"></span><dl class="class">
+<dt id="importers.issue_tracker.github.pr2db_extract_pull_request.GitHubPullRequest2Db">
+<em class="property">class </em><code class="descclassname">importers.issue_tracker.github.pr2db_extract_pull_request.</code><code class="descname">GitHubPullRequest2Db</code><span class="sig-paren">(</span><em>db_name</em>, <em>repo_id</em>, <em>issue_tracker_id</em>, <em>url</em>, <em>interval</em>, <em>token</em>, <em>config</em>, <em>log_root_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/pr2db_extract_pull_request.html#GitHubPullRequest2Db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.pr2db_extract_pull_request.GitHubPullRequest2Db" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class handles the import of GitHub pull requests</p>
+<dl class="method">
+<dt id="importers.issue_tracker.github.pr2db_extract_pull_request.GitHubPullRequest2Db.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/pr2db_extract_pull_request.html#GitHubPullRequest2Db.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.pr2db_extract_pull_request.GitHubPullRequest2Db.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>extracts GitHub pull request data and stores it in the DB</p>
+</dd></dl>
+
+</dd></dl>
+
 <span class="target" id="module-importers.issue_tracker.github.github_dao"></span><dl class="class">
 <dt id="importers.issue_tracker.github.github_dao.GitHubDao">
 <em class="property">class </em><code class="descclassname">importers.issue_tracker.github.github_dao.</code><code class="descname">GitHubDao</code><span class="sig-paren">(</span><em>config</em>, <em>logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao" title="Permalink to this definition">¶</a></dt>
@@ -153,6 +177,24 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.get_already_imported_pull_request_ids">
+<code class="descname">get_already_imported_pull_request_ids</code><span class="sig-paren">(</span><em>issue_tracker_id</em>, <em>repo_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.get_already_imported_pull_request_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.get_already_imported_pull_request_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets pull requests already stored in DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>issue_tracker_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; DB issue tracker id</li>
+<li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; DB repo id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="importers.issue_tracker.github.github_dao.GitHubDao.get_issue_dependency_type_id">
 <code class="descname">get_issue_dependency_type_id</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.get_issue_dependency_type_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.get_issue_dependency_type_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>get id of the issue dependency type</p>
@@ -175,6 +217,24 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message_type</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; message type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.get_pull_request_file_id_by_name">
+<code class="descname">get_pull_request_file_id_by_name</code><span class="sig-paren">(</span><em>pr_id</em>, <em>file_name</em>, <em>repo_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.get_pull_request_file_id_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.get_pull_request_file_id_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the file id linked to a pull request by name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pr_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; DB pull request id</li>
+<li><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file commented</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -395,6 +455,155 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.insert_matched_pull_request_commit">
+<code class="descname">insert_matched_pull_request_commit</code><span class="sig-paren">(</span><em>pull_request_id</em>, <em>commit_id</em>, <em>repo_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.insert_matched_pull_request_commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.insert_matched_pull_request_commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts matched pull request commit to DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pull_request_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; pull request DB id</li>
+<li><strong>commit_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the commit stored in Gitana</li>
+<li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the repository</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.insert_matched_pull_request_file">
+<code class="descname">insert_matched_pull_request_file</code><span class="sig-paren">(</span><em>pull_request_id</em>, <em>file_id</em>, <em>repo_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.insert_matched_pull_request_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.insert_matched_pull_request_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts matched pull request file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pull_request_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; pull request DB id</li>
+<li><strong>file_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the file stored in Gitana</li>
+<li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the repository</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.insert_message_pull_request_file_dependency">
+<code class="descname">insert_message_pull_request_file_dependency</code><span class="sig-paren">(</span><em>comment_id</em>, <em>pull_request_file_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.insert_message_pull_request_file_dependency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.insert_message_pull_request_file_dependency" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts dependency between pull request comment and a file id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>comment_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; pull request comment id</li>
+<li><strong>pull_request_file_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#id" title="(in Python v2.7)"><em>id</em></a>) &#8211; DB pull request file id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.insert_pull_request">
+<code class="descname">insert_pull_request</code><span class="sig-paren">(</span><em>pr_own_id</em>, <em>author_id</em>, <em>state</em>, <em>target_ref_id</em>, <em>merged_at</em>, <em>merged_by</em>, <em>issue_tracker_id</em>, <em>repo_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.insert_pull_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.insert_pull_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts a pull request (note that the pull request id is equal to the issue id,
+since that in GitHub every pull request is an issue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pr_own_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; data source pull request id</li>
+<li><strong>author_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; author id</li>
+<li><strong>state</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; pull request state</li>
+<li><strong>target_ref_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; target reference</li>
+<li><strong>merged_at</strong> (<em>timestamp</em>) &#8211; pull request merged time</li>
+<li><strong>merged_by</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; merger id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.insert_pull_request_comment">
+<code class="descname">insert_pull_request_comment</code><span class="sig-paren">(</span><em>own_id</em>, <em>position</em>, <em>type</em>, <em>pr_id</em>, <em>body</em>, <em>votes</em>, <em>author_id</em>, <em>created_at</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.insert_pull_request_comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.insert_pull_request_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts pull request comment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>own_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#id" title="(in Python v2.7)"><em>id</em></a>) &#8211; data source message id</li>
+<li><strong>position</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; position of the comment</li>
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; type of the message</li>
+<li><strong>pr_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#id" title="(in Python v2.7)"><em>id</em></a>) &#8211; DB pull request id</li>
+<li><strong>body</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; body of the comment</li>
+<li><strong>votes</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; votes of the comment</li>
+<li><strong>author_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the author</li>
+<li><strong>created_at</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; creation date of the comment</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.insert_pull_request_commit">
+<code class="descname">insert_pull_request_commit</code><span class="sig-paren">(</span><em>pull_request_id</em>, <em>repo_id</em>, <em>sha</em>, <em>message</em>, <em>author_id</em>, <em>committer_id</em>, <em>authored_date</em>, <em>committed_date</em>, <em>additions</em>, <em>deletions</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.insert_pull_request_commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.insert_pull_request_commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts pull request commit to DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pull_request_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; pull request DB id</li>
+<li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the repository</li>
+<li><strong>sha</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; SHA of the commit</li>
+<li><strong>message</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; message of the commit</li>
+<li><strong>author_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; author id of the commit</li>
+<li><strong>committer_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; committer id of the commit</li>
+<li><strong>authored_date</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; authored date of the commit</li>
+<li><strong>committed_date</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; committed date of the commit</li>
+<li><strong>additions</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of additions</li>
+<li><strong>deletions</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of additions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.insert_pull_request_file">
+<code class="descname">insert_pull_request_file</code><span class="sig-paren">(</span><em>pull_request_id</em>, <em>repo_id</em>, <em>filename</em>, <em>ext</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.insert_pull_request_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.insert_pull_request_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts pull request file to DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pull_request_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; pull request DB id</li>
+<li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the repository</li>
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the file</li>
+<li><strong>ext</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; extension of the file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="importers.issue_tracker.github.github_dao.GitHubDao.insert_subscriber">
 <code class="descname">insert_subscriber</code><span class="sig-paren">(</span><em>issue_id</em>, <em>subscriber_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.insert_subscriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.insert_subscriber" title="Permalink to this definition">¶</a></dt>
 <dd><p>inserts issue subscriber</p>
@@ -553,6 +762,25 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.select_last_change_pull_request">
+<code class="descname">select_last_change_pull_request</code><span class="sig-paren">(</span><em>pr_id</em>, <em>issue_tracker_id</em>, <em>repo_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.select_last_change_pull_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.select_last_change_pull_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>retrieves last change date of a pull request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pr_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; db pull request id</li>
+<li><strong>issue_tracker_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; issue tracker id</li>
+<li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; repository id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="importers.issue_tracker.github.github_dao.GitHubDao.select_project_id">
 <code class="descname">select_project_id</code><span class="sig-paren">(</span><em>project_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.select_project_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.select_project_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>selects project id by its name</p>
@@ -561,6 +789,38 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>project_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of a project</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.select_pull_request_comment_id">
+<code class="descname">select_pull_request_comment_id</code><span class="sig-paren">(</span><em>own_id</em>, <em>pr_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.select_pull_request_comment_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.select_pull_request_comment_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets pull request comment id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>own_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#id" title="(in Python v2.7)"><em>id</em></a>) &#8211; data source message id</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.select_pull_request_id">
+<code class="descname">select_pull_request_id</code><span class="sig-paren">(</span><em>pr_own_id</em>, <em>issue_tracker_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.select_pull_request_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.select_pull_request_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets pull request id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pr_own_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; data source pull request id</li>
+<li><strong>issue_tracker_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; issue tracker id</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -602,6 +862,28 @@
 <li><strong>priority</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; priority of the issue</li>
 <li><strong>severity</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; severity of the issue</li>
 <li><strong>reference_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the Git reference where the issue was found</li>
+<li><strong>last_change_at</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; last change date of the issue</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.github_dao.GitHubDao.update_pull_request">
+<code class="descname">update_pull_request</code><span class="sig-paren">(</span><em>pr_own_id</em>, <em>issue_tracker_id</em>, <em>summary</em>, <em>status</em>, <em>merged</em>, <em>last_change_at</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/github_dao.html#GitHubDao.update_pull_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.github_dao.GitHubDao.update_pull_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>updates a pull request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pr_own_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; data source pr id</li>
+<li><strong>issue_tracker_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; issue tracker id</li>
+<li><strong>summary</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; new pull request description</li>
+<li><strong>status</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; new pull request status</li>
+<li><strong>merged</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) &#8211; new pull request merged status</li>
 <li><strong>last_change_at</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; last change date of the issue</li>
 </ul>
 </td>
@@ -965,6 +1247,202 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>issue</strong> (<em>Object</em>) &#8211; the Object representing the issue</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request">
+<code class="descname">get_pull_request</code><span class="sig-paren">(</span><em>pr_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets pull request by its id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; data source pr id</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_author">
+<code class="descname">get_pull_request_author</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_author"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_author" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets pull request author</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_base">
+<code class="descname">get_pull_request_base</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the name of the branch where the changes will be pulled into</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commented_file">
+<code class="descname">get_pull_request_commented_file</code><span class="sig-paren">(</span><em>pr_comment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_commented_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commented_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the file referred by the pull request comment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>issue_comment</strong> (<em>Object</em>) &#8211; the Object representing the pull request comment</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_comments">
+<code class="descname">get_pull_request_comments</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_comments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the comments of a pull request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commit_info">
+<code class="descname">get_pull_request_commit_info</code><span class="sig-paren">(</span><em>commit</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_commit_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commit_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the information of a commit</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>commit</strong> (<em>Object</em>) &#8211; the Object representing the commit</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commit_stats">
+<code class="descname">get_pull_request_commit_stats</code><span class="sig-paren">(</span><em>commit</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_commit_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commit_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the stats (deletions, additions) of a commit</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>commit</strong> (<em>Object</em>) &#8211; the Object representing the commit</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commits">
+<code class="descname">get_pull_request_commits</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_commits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_commits" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the commits of a pull request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_files">
+<code class="descname">get_pull_request_files</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the files of a pull request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_ids">
+<code class="descname">get_pull_request_ids</code><span class="sig-paren">(</span><em>before_date</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets data source pull request ids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>before_date</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; selects pull requests with creation date before a given date (YYYY-mm-dd)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged">
+<code class="descname">get_pull_request_merged</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_merged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets whether the pull request has been merged or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged_at">
+<code class="descname">get_pull_request_merged_at</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_merged_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the date of a pull request merge</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged_by">
+<code class="descname">get_pull_request_merged_by</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_merged_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_merged_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the author of a pull request merge</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_state">
+<code class="descname">get_pull_request_state</code><span class="sig-paren">(</span><em>pr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/issue_tracker/github/querier_github.html#GitHubQuerier.get_pull_request_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.issue_tracker.github.querier_github.GitHubQuerier.get_pull_request_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets version of the pull request</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pr</strong> (<em>Object</em>) &#8211; the Object representing the pull request</td>
 </tr>
 </tbody>
 </table>

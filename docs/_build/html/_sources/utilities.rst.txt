@@ -8,3 +8,4 @@ Utilities
    util_logging
    util_multiprocessing
    util_token
+   util_github_user

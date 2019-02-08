@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Git &#8212; Gitana 1.0.1 documentation</title>
+    <title>Git &#8212; Gitana 1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -71,7 +71,7 @@
 
 <span class="target" id="module-importers.vcs.git.git2db_extract_reference"></span><dl class="class">
 <dt id="importers.vcs.git.git2db_extract_reference.Git2DbReference">
-<em class="property">class </em><code class="descclassname">importers.vcs.git.git2db_extract_reference.</code><code class="descname">Git2DbReference</code><span class="sig-paren">(</span><em>db_name</em>, <em>repo_id</em>, <em>git_repo_path</em>, <em>before_date</em>, <em>import_type</em>, <em>ref_name</em>, <em>ref_type</em>, <em>from_sha</em>, <em>config</em>, <em>log_root_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git2db_extract_reference.html#Git2DbReference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git2db_extract_reference.Git2DbReference" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">importers.vcs.git.git2db_extract_reference.</code><code class="descname">Git2DbReference</code><span class="sig-paren">(</span><em>db_name</em>, <em>repo_id</em>, <em>git_repo_path</em>, <em>before_date</em>, <em>import_type</em>, <em>ref_name</em>, <em>from_sha</em>, <em>config</em>, <em>log_root_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git2db_extract_reference.html#Git2DbReference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git2db_extract_reference.Git2DbReference" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class handles the import of Git references</p>
 <dl class="method">
 <dt id="importers.vcs.git.git2db_extract_reference.Git2DbReference.extract">
@@ -81,10 +81,91 @@
 
 </dd></dl>
 
+<span class="target" id="module-importers.vcs.git.fun2db_extract_main"></span><dl class="class">
+<dt id="importers.vcs.git.fun2db_extract_main.Fun2DbMain">
+<em class="property">class </em><code class="descclassname">importers.vcs.git.fun2db_extract_main.</code><code class="descname">Fun2DbMain</code><span class="sig-paren">(</span><em>db_name</em>, <em>project_name</em>, <em>repo_name</em>, <em>git_repo_path</em>, <em>import_type</em>, <em>refs</em>, <em>num_processes</em>, <em>config</em>, <em>log_root_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/fun2db_extract_main.html#Fun2DbMain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.fun2db_extract_main.Fun2DbMain" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class handles the import of code functions</p>
+<dl class="method">
+<dt id="importers.vcs.git.fun2db_extract_main.Fun2DbMain.delete_function_data">
+<code class="descname">delete_function_data</code><span class="sig-paren">(</span><em>refs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/fun2db_extract_main.html#Fun2DbMain.delete_function_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.fun2db_extract_main.Fun2DbMain.delete_function_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete function data for a set of references from the Gitana DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>refs</strong> (<em>list str</em>) &#8211; list of refs to delete. It cannot be null or [&#8220;ref-name-1&#8221;, .., &#8220;ref-name-n&#8221;]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.vcs.git.fun2db_extract_main.Fun2DbMain.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/fun2db_extract_main.html#Fun2DbMain.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.fun2db_extract_main.Fun2DbMain.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>extracts code function data and stores it in the DB</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-importers.vcs.git.fun2db_extract_reference"></span><dl class="class">
+<dt id="importers.vcs.git.fun2db_extract_reference.Fun2DbReference">
+<em class="property">class </em><code class="descclassname">importers.vcs.git.fun2db_extract_reference.</code><code class="descname">Fun2DbReference</code><span class="sig-paren">(</span><em>db_name</em>, <em>repo_id</em>, <em>git_repo_path</em>, <em>import_type</em>, <em>tag_id</em>, <em>tag_name</em>, <em>config</em>, <em>log_root_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/fun2db_extract_reference.html#Fun2DbReference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.fun2db_extract_reference.Fun2DbReference" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class handles the import of code function data for a given tag reference</p>
+<dl class="method">
+<dt id="importers.vcs.git.fun2db_extract_reference.Fun2DbReference.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/fun2db_extract_reference.html#Fun2DbReference.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.fun2db_extract_reference.Fun2DbReference.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>extracts code function data and stores it in the DB</p>
+</dd></dl>
+
+</dd></dl>
+
 <span class="target" id="module-importers.vcs.git.git_dao"></span><dl class="class">
 <dt id="importers.vcs.git.git_dao.GitDao">
 <em class="property">class </em><code class="descclassname">importers.vcs.git.git_dao.</code><code class="descname">GitDao</code><span class="sig-paren">(</span><em>config</em>, <em>logger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class handles the persistence and retrieval of Git data</p>
+<dl class="method">
+<dt id="importers.vcs.git.git_dao.GitDao.delete_from_code_in_ref">
+<code class="descname">delete_from_code_in_ref</code><span class="sig-paren">(</span><em>ref_ids</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.delete_from_code_in_ref"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.delete_from_code_in_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all data from the table code_in_ref for a set of given references</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ref_ids</strong> (<em>list int</em>) &#8211; reference ids</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.vcs.git.git_dao.GitDao.delete_from_function_in_ref_table">
+<code class="descname">delete_from_function_in_ref_table</code><span class="sig-paren">(</span><em>ref_ids</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.delete_from_function_in_ref_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.delete_from_function_in_ref_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all data from the table function_in_ref for a set of given references</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ref_ids</strong> (<em>list int</em>) &#8211; reference ids</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.vcs.git.git_dao.GitDao.delete_from_function_table">
+<code class="descname">delete_from_function_table</code><span class="sig-paren">(</span><em>ref_ids</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.delete_from_function_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.delete_from_function_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all data from the table function for a set of given references, if possible.
+A function is deleted if there are no other references where the function is present.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ref_ids</strong> (<em>list int</em>) &#8211; reference ids</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="importers.vcs.git.git_dao.GitDao.file_modification_patch_is_empty">
 <code class="descname">file_modification_patch_is_empty</code><span class="sig-paren">(</span><em>repo_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.file_modification_patch_is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.file_modification_patch_is_empty" title="Permalink to this definition">¶</a></dt>
@@ -137,7 +218,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>user_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the user</li>
-<li><strong>user_email</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; email of the user</li>
+<li><strong>user_name</strong> &#8211; email of the user</li>
 </ul>
 </td>
 </tr>
@@ -158,6 +239,33 @@
 <li><strong>commit_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the commit</li>
 <li><strong>sha</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; SHA of the commit</li>
 <li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the repository</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.vcs.git.git_dao.GitDao.insert_code_in_reference">
+<code class="descname">insert_code_in_reference</code><span class="sig-paren">(</span><em>file_id</em>, <em>tag_id</em>, <em>ccn</em>, <em>loc</em>, <em>comments</em>, <em>blanks</em>, <em>funs</em>, <em>tokens</em>, <em>avg_ccn</em>, <em>avg_loc</em>, <em>avg_tokens</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.insert_code_in_reference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.insert_code_in_reference" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts file complexity to DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the file</li>
+<li><strong>tag_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the tag reference</li>
+<li><strong>ccn</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; cyclomatic complexity value</li>
+<li><strong>loc</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; lines of code</li>
+<li><strong>comments</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; commented lines</li>
+<li><strong>blanks</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; blank lines</li>
+<li><strong>funs</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of functions</li>
+<li><strong>tokens</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; tokens in the files</li>
+<li><strong>avg_ccn</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; file avg cyclomatic complexity (per function)</li>
+<li><strong>avg_loc</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; file avg lines of code (per function)</li>
+<li><strong>avg_tokens</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; file avg number of tokens (per function)</li>
 </ul>
 </td>
 </tr>
@@ -244,7 +352,7 @@
 
 <dl class="method">
 <dt id="importers.vcs.git.git_dao.GitDao.insert_file">
-<code class="descname">insert_file</code><span class="sig-paren">(</span><em>repo_id</em>, <em>name</em>, <em>ext=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.insert_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.insert_file" title="Permalink to this definition">¶</a></dt>
+<code class="descname">insert_file</code><span class="sig-paren">(</span><em>repo_id</em>, <em>name</em>, <em>ext</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.insert_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.insert_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>inserts file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -286,7 +394,7 @@
 
 <dl class="method">
 <dt id="importers.vcs.git.git_dao.GitDao.insert_file_renamed">
-<code class="descname">insert_file_renamed</code><span class="sig-paren">(</span><em>repo_id</em>, <em>current_file_id</em>, <em>previous_file_id</em>, <em>file_modification_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.insert_file_renamed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.insert_file_renamed" title="Permalink to this definition">¶</a></dt>
+<code class="descname">insert_file_renamed</code><span class="sig-paren">(</span><em>repo_id</em>, <em>current_file_id</em>, <em>previous_file_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.insert_file_renamed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.insert_file_renamed" title="Permalink to this definition">¶</a></dt>
 <dd><p>inserts file renamed information</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -296,7 +404,49 @@
 <li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the repository</li>
 <li><strong>current_file_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the renamed file</li>
 <li><strong>previous_file_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the file before renaming</li>
-<li><strong>file_modification_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the file modification</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.vcs.git.git_dao.GitDao.insert_function">
+<code class="descname">insert_function</code><span class="sig-paren">(</span><em>function_name</em>, <em>file_id</em>, <em>num_arguments</em>, <em>loc</em>, <em>tokens</em>, <em>total_lines</em>, <em>ccn</em>, <em>start_line</em>, <em>end_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.insert_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.insert_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts function to DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>function_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the function</li>
+<li><strong>file_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the file</li>
+<li><strong>num_arguments</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of arguments</li>
+<li><strong>loc</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; lines of code</li>
+<li><strong>tokens</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; tokens in the function</li>
+<li><strong>total_lines</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; number of lines (loc + comments + empty lines)</li>
+<li><strong>ccn</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; cyclomatic complexity of the function</li>
+<li><strong>start_line</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; line number where the function starts</li>
+<li><strong>end_line</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; line number where the function ends</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.vcs.git.git_dao.GitDao.insert_function_in_reference">
+<code class="descname">insert_function_in_reference</code><span class="sig-paren">(</span><em>fun_id</em>, <em>tag_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.insert_function_in_reference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.insert_function_in_reference" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts link between a function and the tag reference</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fun_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the function</li>
+<li><strong>ref_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the tag</li>
 </ul>
 </td>
 </tr>
@@ -333,7 +483,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>repo_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the repository</li>
 <li><strong>ref_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the reference</li>
-<li><strong>ref_type</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; type of the reference (branch or tag)</li>
+<li><strong>ref_name</strong> &#8211; type of the reference (branch or tag)</li>
 </ul>
 </td>
 </tr>
@@ -472,6 +622,25 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>commit_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the commit</li>
 <li><strong>file_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="importers.vcs.git.git_dao.GitDao.select_function_id">
+<code class="descname">select_function_id</code><span class="sig-paren">(</span><em>file_id</em>, <em>start_line</em>, <em>end_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/git_dao.html#GitDao.select_function_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.git_dao.GitDao.select_function_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>select DB function id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_id</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; id of the file</li>
+<li><strong>start_line</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; line number where the function starts</li>
+<li><strong>end_line</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; line number where the function ends</li>
 </ul>
 </td>
 </tr>
@@ -749,7 +918,7 @@
 
 <dl class="method">
 <dt id="importers.vcs.git.querier_git.GitQuerier.get_file_content">
-<code class="descname">get_file_content</code><span class="sig-paren">(</span><em>ref</em>, <em>_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/querier_git.html#GitQuerier.get_file_content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.querier_git.GitQuerier.get_file_content" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_file_content</code><span class="sig-paren">(</span><em>ref</em>, <em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/querier_git.html#GitQuerier.get_file_content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.querier_git.GitQuerier.get_file_content" title="Permalink to this definition">¶</a></dt>
 <dd><p>gets content of a file for a given reference</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -757,7 +926,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>ref</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; name of the reference</li>
-<li><strong>_file</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; repo file path</li>
+<li><strong>file</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; repo file path</li>
 </ul>
 </td>
 </tr>
@@ -919,6 +1088,12 @@
 </table>
 </dd></dl>
 
+</dd></dl>
+
+<span class="target" id="module-importers.vcs.git.querier_fun"></span><dl class="class">
+<dt id="importers.vcs.git.querier_fun.FunQuerier">
+<em class="property">class </em><code class="descclassname">importers.vcs.git.querier_fun.</code><code class="descname">FunQuerier</code><span class="sig-paren">(</span><em>logger</em>, <em>tmp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/importers/vcs/git/querier_fun.html#FunQuerier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#importers.vcs.git.querier_fun.FunQuerier" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class collects the code function data using the Lizard python library</p>
 </dd></dl>
 
 </div>

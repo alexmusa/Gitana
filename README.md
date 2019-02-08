@@ -10,12 +10,6 @@ Gitana also provides support to generate project activity reports and perform co
 
 More information can be found on the [Gitana documentation site.](http://gitanadocs.getforge.io/)
 
-## Who is behind this project?
-
-* [Valerio Cosentino](http://valeriocos.github.io "Valerio Cosentino")
-* [Javier Canovas](http://github.com/jlcanovas/ "Javier Canovas")
-* [Jordi Cabot](http://github.com/jcabot/ "Jordi Cabot")
-
 ## Licensing
 
 Gitana is distributed under the MIT License (https://opensource.org/licenses/MIT)
