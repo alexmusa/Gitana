@@ -50,8 +50,8 @@ class EclipseForumDao():
         :type user_name: str
         :param user_name: user name
         """
-        if not user_name:
-            user_name = "uknonwn_user"
+        if user_name == None:
+            user_name = "unknown_user"
 
         user_id = self._db_util.select_user_id_by_name(self._cnx, user_name, self._logger)
         if not user_id:
@@ -236,8 +236,8 @@ class EclipseForumDao():
         try:
             cursor = self._cnx.cursor()
             query = "INSERT IGNORE INTO message " \
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            arguments = [None, own_id, pos, type, 0, topic_id, 0, body, votes, author_id, created_at]
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            arguments = [None, own_id, pos, type, 0, topic_id, 0, 0, body, votes, author_id, created_at]
             cursor.execute(query, arguments)
             self._cnx.commit()
 
@@ -253,8 +253,7 @@ class EclipseForumDao():
             cursor.close()
             return found
         except:
-            self._logger.warning("message " + str(own_id) + ") for topic id: " + str(topic_id) + " not inserted",
-                                 exc_info=True)
+            self._logger.warning("message " + str(own_id) + ") for topic id: " + str(topic_id) + " not inserted", exc_info=True)
 
     def select_forum_id(self, forum_name, project_id):
         """
@@ -353,8 +352,7 @@ class EclipseForumDao():
             cursor.close()
             return found
         except Exception:
-            self._logger.warning("topic id " + str(own_id) + " not found for forum id: " + str(forum_id),
-                                 exc_info=True)
+            self._logger.warning("topic id " + str(own_id) + " not found for forum id: " + str(forum_id), exc_info=True)
 
     def insert_topic(self, own_id, forum_id, title, views, last_change_at):
         """
@@ -384,8 +382,7 @@ class EclipseForumDao():
             self._cnx.commit()
             cursor.close()
         except Exception:
-            self._logger.warning("topic with title " + title.lower() + " not inserted for forum id: " + str(forum_id),
-                                 exc_info=True)
+            self._logger.warning("topic with title " + title.lower() + " not inserted for forum id: " + str(forum_id), exc_info=True)
 
     def update_topic_info(self, topic_id, forum_id, views, last_change_at):
         """

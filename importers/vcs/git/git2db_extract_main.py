@@ -39,10 +39,7 @@ class Git2DbMain():
         :param before_date: import data before date (YYYY-mm-dd)
 
         :type import_type: int
-        :param import_type:
-        1 does not import patches,
-        2 imports patches but not at line level,
-        3 imports patches with line detail
+        :param import_type: 1 does not import patches, 2 imports patches but not at line level, 3 imports patches with line detail
 
         :type references: list str
         :param references: list of references to import
@@ -82,7 +79,7 @@ class Git2DbMain():
         self._dao = None
 
     def _get_existing_references(self, repo_id):
-        # retrieves already imported references
+        #retrieves already imported references
         existing_refs = []
 
         cursor = self._dao.get_cursor()
@@ -102,7 +99,7 @@ class Git2DbMain():
         return existing_refs
 
     def _get_info_contribution(self, repo_id):
-        # processes Git data
+        #processes Git data
         existing_refs = self._get_existing_references(repo_id)
 
         queue_references = multiprocessing.JoinableQueue()
@@ -110,22 +107,18 @@ class Git2DbMain():
 
         # Start consumers
         multiprocessing_util.start_consumers(self._num_processes, queue_references, results)
-
         for reference in self._querier.get_references():
-            ref_name = reference[0]
-            ref_type = reference[1]
-
             if self._references:
-                if ref_name in self._references:
+                if reference[0] in self._references:
                     git_ref_extractor = Git2DbReference(self._db_name, repo_id, self._git_repo_path,
-                                                        self._before_date, self._import_type, ref_name, ref_type, "",
+                                                        self._before_date, self._import_type, reference[0], "",
                                                         self._config, self._log_path)
 
                     queue_references.put(git_ref_extractor)
             else:
-                if ref_name not in existing_refs:
+                if reference[0] not in existing_refs:
                     git_ref_extractor = Git2DbReference(self._db_name, repo_id, self._git_repo_path,
-                                                        self._before_date, self._import_type, ref_name, ref_type, "",
+                                                        self._before_date, self._import_type, reference[0], "",
                                                         self._config, self._log_path)
 
                     queue_references.put(git_ref_extractor)
@@ -153,14 +146,14 @@ class Git2DbMain():
             project_id = self._dao.select_project_id(self._project_name)
             self._dao.insert_repo(project_id, self._repo_name)
             repo_id = self._dao.select_repo_id(self._repo_name)
-
+            #info contribution does not need a connection to the db
             self._get_info_contribution(repo_id)
             self._dao.restart_connection()
             self._dao.fix_commit_parent_table(repo_id)
             end_time = datetime.now()
             minutes_and_seconds = self._logging_util.calculate_execution_time(end_time, start_time)
-            self._logger.info("Git2DbMain finished after " + str(minutes_and_seconds[0]) +
-                              " minutes and " + str(round(minutes_and_seconds[1], 1)) + " secs")
+            self._logger.info("Git2DbMain finished after " + str(minutes_and_seconds[0])
+                         + " minutes and " + str(round(minutes_and_seconds[1], 1)) + " secs")
             self._logging_util.remove_file_handler_logger(self._logger, self._fileHandler)
         except Exception:
             self._logger.error("Git2DbMain failed", exc_info=True)

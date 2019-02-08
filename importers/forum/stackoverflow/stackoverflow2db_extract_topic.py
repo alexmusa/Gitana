@@ -42,31 +42,29 @@ class StackOverflowTopic2Db(object):
         self._forum_id = forum_id
         self._token = token
         self._config = config
-
-        self._logging_util = LoggingUtil()
-
         self._fileHandler = None
         self._logger = None
         self._querier = None
         self._dao = None
 
     def __call__(self):
-        try:
-            log_path = self._log_root_path + "-topic2db-" + str(self._interval[0]) + "-" + str(self._interval[-1])
-            self._logger = self._logging_util.get_logger(log_path)
-            self._fileHandler = self._logging_util.get_file_handler(self._logger, log_path, "info")
+        self._logging_util = LoggingUtil()
+        log_path = self._log_root_path + "-topic2db-" + str(self._interval[0]) + "-" + str(self._interval[-1])
+        self._logger = self._logging_util.get_logger(log_path)
+        self._fileHandler = self._logging_util.get_file_handler(self._logger, log_path, "info")
 
+        try:
             self._querier = StackOverflowQuerier(self._token, self._logger)
             self._dao = StackOverflowDao(self._config, self._logger)
             self.extract()
-        except Exception:
+        except Exception, e:
             self._logger.error("StackOverflowTopic2Db failed", exc_info=True)
         finally:
             if self._dao:
                 self._dao.close_connection()
 
     def _extract_answers(self, answers, topic_id, message_id):
-        # extracts answers
+        #extracts answers
         for a in answers:
             own_id = self._querier.get_container_own_id(a)
             body = self._querier.get_container_body(a)
@@ -84,8 +82,7 @@ class StackOverflowTopic2Db(object):
             if answer_message_id:
                 self._dao.update_message(own_id, topic_id, body, votes)
             else:
-                self._dao.insert_message(own_id, self.pos, self._dao.get_message_type_id(message_type), topic_id,
-                                         self._querier.remove_html_tags(body), votes, author_id, created_at)
+                self._dao.insert_message(own_id, self.pos, self._dao.get_message_type_id(message_type), topic_id, self._querier.remove_html_tags(body), votes, author_id, created_at)
                 answer_message_id = self._dao.select_message_id(own_id, topic_id)
 
             self._dao.insert_message_dependency(message_id, answer_message_id)
@@ -95,7 +92,7 @@ class StackOverflowTopic2Db(object):
             self._extract_comment_messages(self._querier.get_comments(a), topic_id, answer_message_id)
 
     def _extract_comment_messages(self, comments, topic_id, message_id):
-        # extracts comments
+        #extracts comments
         for c in comments:
             own_id = self._querier.get_container_own_id(c)
             body = self._querier.get_container_body(c)
@@ -107,8 +104,7 @@ class StackOverflowTopic2Db(object):
             if comment_message_id:
                 self._dao.update_message(own_id, topic_id, body, votes)
             else:
-                self._dao.insert_message(own_id, self.pos, self._dao.get_message_type_id("comment"), topic_id,
-                                         self._querier.remove_html_tags(body), votes, author_id, created_at)
+                self._dao.insert_message(own_id, self.pos, self._dao.get_message_type_id("comment"), topic_id, self._querier.remove_html_tags(body), votes, author_id, created_at)
                 comment_message_id = self._dao.select_message_id(own_id, topic_id)
 
             self._dao.insert_message_dependency(message_id, comment_message_id)
@@ -116,7 +112,7 @@ class StackOverflowTopic2Db(object):
             self.pos += 1
 
     def _extract_attachments(self, body, message_id):
-        # extracts attachments
+        #extracts attachments
         attachments = self._querier.get_attachments(body)
         if attachments:
             self._insert_attachments(attachments, message_id)
@@ -128,7 +124,7 @@ class StackOverflowTopic2Db(object):
             self._dao.assign_label_to_topic(label_id, topic_id)
 
     def _insert_attachments(self, attachments, message_id):
-        # inserts attachments
+        #inserts attachments
         pos = 0
         for attachment in attachments:
             attachment_name = self._querier.get_attachment_name(attachment)
@@ -138,7 +134,7 @@ class StackOverflowTopic2Db(object):
             pos += 1
 
     def _extract_topic(self, topic):
-        # extracts a topic
+        #extracts a topic
         last_change_at = self._querier.get_topic_last_change_at(topic)
         own_id = self._querier.get_container_own_id(topic)
 
@@ -161,9 +157,8 @@ class StackOverflowTopic2Db(object):
             if message_id:
                 self._dao.update_message(own_id, topic_id, self._querier.remove_html_tags(body), votes)
             else:
-                self._dao.insert_message(own_id, self.pos, self._dao.get_message_type_id("question"), topic_id,
-                                         self._querier.remove_html_tags(body),
-                                         votes, author_id, created_at)
+                self._dao.insert_message(own_id, self.pos, self._dao.get_message_type_id("question"), topic_id, self._querier.remove_html_tags(body),
+                                        votes, author_id, created_at)
                 message_id = self._dao.select_message_id(own_id, topic_id)
             self._extract_attachments(body, message_id)
 
@@ -188,8 +183,8 @@ class StackOverflowTopic2Db(object):
             end_time = datetime.now()
 
             minutes_and_seconds = self._logging_util.calculate_execution_time(end_time, start_time)
-            self._logger.info("StackOverflowTopic2Db finished after " + str(minutes_and_seconds[0]) +
-                              " minutes and " + str(round(minutes_and_seconds[1], 1)) + " secs")
+            self._logger.info("StackOverflowTopic2Db finished after " + str(minutes_and_seconds[0])
+                           + " minutes and " + str(round(minutes_and_seconds[1], 1)) + " secs")
             self._logging_util.remove_file_handler_logger(self._logger, self._fileHandler)
         except Exception:
             self._logger.error("StackOverflowTopic2Db failed", exc_info=True)

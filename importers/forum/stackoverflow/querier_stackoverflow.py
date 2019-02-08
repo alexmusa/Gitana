@@ -28,7 +28,7 @@ class StackOverflowQuerier():
             self._logger = logger
             self._token_util = TokenUtil(self._logger, "stackoverflow")
             self._date_util = DateUtil()
-            self._so = stackexchange.Site(stackexchange.StackOverflow, app_key=self._token)
+            self._so = stackexchange.Site(stackexchange.StackOverflow, app_key = self._token)
             self._so.impose_throttling = True
             self._so.throttle_stop = False
         except:
@@ -52,8 +52,7 @@ class StackOverflowQuerier():
             self._token_util.wait_is_usable(self._so)
 
         if before_date:
-            questions = [q for q in questions if q.creation_date <=
-                         self._date_util.get_timestamp(before_date, "%Y-%m-%d")]
+            questions = [q for q in questions if q.creation_date <= self._date_util.get_timestamp(before_date, "%Y-%m-%d")]
 
         return [question.id for question in questions]
 
@@ -178,10 +177,7 @@ class StackOverflowQuerier():
         :param container: the Object representing the container
         """
         self._token_util.wait_is_usable(self._so)
-        try:
-            user = self._so.user(container.owner_id).display_name
-        except:
-            user = None
+        user = self._so.user(container.owner_id).display_name
         return user
 
     def get_comments(self, container):
@@ -280,3 +276,10 @@ class StackOverflowQuerier():
         :param pos: position of the message where the attachment was found
         """
         return str(message_id) + str(pos)
+
+
+
+
+
+
+

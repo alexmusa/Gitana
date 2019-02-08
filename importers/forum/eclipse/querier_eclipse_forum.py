@@ -7,7 +7,6 @@ import os
 
 from selenium import webdriver
 import util
-
 WEB_DRIVER_PATH = os.path.dirname(util.__file__) + "\selenium_driver\phantomjs.exe"
 
 
@@ -38,6 +37,8 @@ class EclipseForumQuerier():
         """
         if not self._driver:
             self._driver = webdriver.PhantomJS(executable_path=WEB_DRIVER_PATH)
+            ## uncomment the line below for linux systems
+            #self._driver = webdriver.PhantomJS()
             self._driver.maximize_window()
         self._driver.get(self._url)
 
@@ -75,6 +76,10 @@ class EclipseForumQuerier():
         """
         try:
             found = topic_element.find_element_by_class_name("big").text
+        #small = topic_element.find_element_by_class_name("small").text
+
+        #if small:
+        #    title = title + " ( " + small + " )"
         except:
             self._logger.error("EclipseForumQuerier topic title not found")
             found = None
@@ -206,8 +211,7 @@ class EclipseForumQuerier():
         :param message: the Object representing the message
         """
         try:
-            class_content = message.find_element_by_class_name("MsgR2").find_element_by_class_name("msgud")
-            found = class_content.find_elements_by_tag_name("a")[0].text
+            found = message.find_element_by_class_name("MsgR2").find_element_by_class_name("msgud").find_elements_by_tag_name("a")[0].text
         except:
             self._logger.error("EclipseForumQuerier message author name not found")
             found = None
@@ -322,11 +326,10 @@ class EclipseForumQuerier():
         return found
 
     def _load_next_page(self):
-        # loads the next page
+        #loas the next page
         while True:
             try:
-                background = self._driver.find_element_by_class_name("ForumBackground")
-                found = background.find_elements_by_tag_name("table")[2].text
+                found = self._driver.find_element_by_class_name("ForumBackground").find_elements_by_tag_name("table")[2].text
                 if found:
                     break
             except:
@@ -334,11 +337,10 @@ class EclipseForumQuerier():
                 time.sleep(1)
 
     def go_next_page(self):
-        # goes to the next page
+        #goes to the next page
         done = False
         try:
-            found = [l for l in self._driver.find_elements_by_class_name("PagerLink")
-                     if l.get_attribute("accesskey") == "n"]
+            found = [l for l in self._driver.find_elements_by_class_name("PagerLink") if l.get_attribute("accesskey") == "n"]
         except:
             found = []
 
@@ -348,3 +350,8 @@ class EclipseForumQuerier():
             done = True
 
         return done
+
+
+
+
+

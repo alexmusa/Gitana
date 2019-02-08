@@ -63,6 +63,56 @@ class GitDao():
     def array2string(self, array):
         return ','.join(str(x) for x in array)
 
+    def function_at_commit_is_empty(self, repo_id):
+        """
+        checks function at commit table is empty
+
+        :type repo_id: int
+        :param repo_id: id of an existing repository in the DB
+        """
+        cursor = self._cnx.cursor()
+        query = "SELECT COUNT(*) " \
+                "FROM commit c " \
+                "JOIN function_at_commit fac ON c.id = fac.commit_id " \
+                "WHERE c.repo_id = %s"
+        arguments = [repo_id]
+        cursor.execute(query, arguments)
+
+        row = cursor.fetchone()
+        count = 0
+        if row:
+            count = int(row[0])
+
+        cursor.close()
+
+        return int(count > 0)
+
+    def select_code_at_commit(self, commit_id, file_id):
+        """
+        retrieve the code at commit info for a given file and commit
+
+        :type commit_id: int
+        :param commit_id: id of an existing commit in the DB
+
+        :type file_id: int
+        :param file_id: id of an existing file in the DB
+        """
+        found = None
+        cursor = self._cnx.cursor()
+        query = "SELECT * " \
+                "FROM code_at_commit " \
+                "WHERE commit_id = %s AND file_id = %s"
+        arguments = [commit_id, file_id]
+        cursor.execute(query, arguments)
+
+        row = cursor.fetchone()
+        if row:
+            found = row
+
+        cursor.close()
+
+        return found
+
     def line_detail_table_is_empty(self, repo_id):
         """
         checks line detail table is empty
@@ -76,6 +126,30 @@ class GitDao():
                 "JOIN file_modification fm ON c.id = fm.commit_id " \
                 "JOIN line_detail l ON fm.id = l.file_modification_id " \
                 "WHERE l.content IS NOT NULL AND repo_id = %s"
+        arguments = [repo_id]
+        cursor.execute(query, arguments)
+
+        row = cursor.fetchone()
+        count = 0
+        if row:
+            count = int(row[0])
+
+        cursor.close()
+
+        return int(count > 0)
+
+    def code_at_commit_is_empty(self, repo_id):
+        """
+        checks code at commit table is empty
+
+        :type repo_id: int
+        :param repo_id: id of an existing repository in the DB
+        """
+        cursor = self._cnx.cursor()
+        query = "SELECT COUNT(*) " \
+                "FROM commit c " \
+                "JOIN code_at_commit cac ON c.id = cac.commit_id " \
+                "WHERE c.repo_id = %s"
         arguments = [repo_id]
         cursor.execute(query, arguments)
 
@@ -175,9 +249,9 @@ class GitDao():
         :param user_email: email of the user
         """
 
-        if not user_email and not user_name:
-            user_name = "uknonwn_user"
-            user_email = "uknonwn_user"
+        if user_email == None and user_name == None:
+            user_name = "unknown_user"
+            user_email = "unknown_user"
 
         if user_email:
             user_id = self._db_util.select_user_id_by_email(self._cnx, user_email, self._logger)
@@ -256,8 +330,7 @@ class GitDao():
 
         if to_insert:
             cursor = self._cnx.cursor()
-            query = "INSERT IGNORE INTO commit_parent(repo_id, commit_id, commit_sha, parent_id, parent_sha) " \
-                    "VALUES (%s, %s, %s, %s, %s)"
+            query = "INSERT IGNORE INTO commit_parent(repo_id, commit_id, commit_sha, parent_id, parent_sha) VALUES (%s, %s, %s, %s, %s)"
             cursor.executemany(query, [i for i in to_insert])
             self._cnx.commit()
             cursor.close()
@@ -400,7 +473,7 @@ class GitDao():
         self._cnx.commit()
         cursor.close()
 
-    def insert_file(self, repo_id, name, ext=None):
+    def insert_file(self, repo_id, name, ext):
         """
         inserts file
 
@@ -416,43 +489,10 @@ class GitDao():
         cursor = self._cnx.cursor()
         query = "INSERT IGNORE INTO file " \
                 "VALUES (%s, %s, %s, %s)"
-
-        # extract file extension from file path if not passed
-        if not ext:
-            ext = name.split('.')[-1]
-
         arguments = [None, repo_id, name, ext]
         cursor.execute(query, arguments)
         self._cnx.commit()
         cursor.close()
-
-    def select_file_id_before_date(self, repo_id, name, before_date):
-        """
-        selects id of the file before date
-
-        :type repo_id: int
-        :param repo_id: id of the repository
-
-        :type name: str
-        :param name: name of the file (full path)
-
-        :type before_date: timestamp
-        :param before_date: date
-        """
-        cursor = self._cnx.cursor()
-        query = "SELECT DISTINCT f.id " \
-                "FROM file f JOIN file_modification fm ON f.id = fm.file_id " \
-                "JOIN commit c ON c.id = fm.commit_id " \
-                "WHERE f.name = %s AND f.repo_id = %s AND fm.status = 'added' " \
-                "AND c.authored_date <= '" + str(before_date) + "' "
-        arguments = [name, repo_id]
-        cursor.execute(query, arguments)
-        try:
-            id = cursor.fetchone()[0]
-        except:
-            id = None
-        cursor.close()
-        return id
 
     def select_file_id(self, repo_id, name):
         """
@@ -586,6 +626,138 @@ class GitDao():
         self._cnx.commit()
         cursor.close()
 
+    def select_function_id(self, file_id, start_line, end_line):
+        """
+        select DB function id
+
+        :type file_id: int
+        :param file_id: id of the file
+
+        :type start_line: int
+        :param start_line: line number where the function starts
+
+        :type end_line: int
+        :param end_line: line number where the function ends
+        """
+        found = None
+        cursor = self._cnx.cursor()
+        query = "SELECT id " \
+                "FROM function " \
+                "WHERE file_id = %s AND start_line = %s AND end_line = %s"
+        arguments = [file_id, start_line, end_line]
+        cursor.execute(query, arguments)
+
+        row = cursor.fetchone()
+
+        if row:
+            found = row[0]
+
+        cursor.close()
+
+        return found
+
+    def insert_code_at_commit(self, commit_id, file_id, ccn, loc, comments, blanks, funs, tokens, avg_ccn, avg_loc, avg_tokens):
+        """
+        inserts to DB code information of a file at a given commit
+
+        :type commit_id: int
+        :param commit_id: id of the commit
+
+        :type file_id: int
+        :param file_id: id of the file
+
+        :type ccn: int
+        :param ccn: cyclomatic complexity value
+
+        :type loc: int
+        :param loc: lines of code
+
+        :type comments: int
+        :param comments: commented lines
+
+        :type blanks: int
+        :param blanks: blank lines
+
+        :type funs: int
+        :param funs: number of functions
+
+        :type tokens: int
+        :param tokens: tokens in the files
+
+        :type avg_ccn: int
+        :param avg_ccn: file avg cyclomatic complexity (per function)
+
+        :type avg_loc: int
+        :param avg_loc: file avg lines of code (per function)
+
+        :type avg_tokens: int
+        :param avg_tokens: file avg number of tokens (per function)
+        """
+        cursor = self._cnx.cursor()
+        query = "INSERT IGNORE INTO code_at_commit " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        arguments = [commit_id, file_id, ccn, loc, comments, blanks, funs, tokens, avg_ccn, avg_loc, avg_tokens]
+        cursor.execute(query, arguments)
+        self._cnx.commit()
+        cursor.close()
+
+    def insert_function(self, function_name, file_id, num_arguments, loc, tokens, total_lines, ccn, start_line, end_line):
+        """
+        inserts function to DB
+
+        :type function_name: str
+        :param function_name: name of the function
+
+        :type file_id: int
+        :param file_id: id of the file
+
+        :type num_arguments: int
+        :param num_arguments: number of arguments
+
+        :type loc: int
+        :param loc: lines of code
+
+        :type tokens: int
+        :param tokens: tokens in the function
+
+        :type total_lines: int
+        :param total_lines: number of lines (loc + comments + empty lines)
+
+        :type ccn: int
+        :param ccn: cyclomatic complexity of the function
+
+        :type start_line: int
+        :param start_line: line number where the function starts
+
+        :type end_line: int
+        :param end_line: line number where the function ends
+        """
+        cursor = self._cnx.cursor()
+        query = "INSERT IGNORE INTO function " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        arguments = [None, function_name, file_id, num_arguments, loc, tokens, total_lines, ccn, start_line, end_line]
+        cursor.execute(query, arguments)
+        self._cnx.commit()
+        cursor.close()
+
+    def insert_function_at_commit(self, fun_id,  commit_id):
+        """
+        inserts link between a function and the commit
+
+        :type fun_id: int
+        :param fun_id: id of the function
+
+        :type commit_id: int
+        :param commit_id: id of the commit
+        """
+        cursor = self._cnx.cursor()
+        query = "INSERT IGNORE INTO function_at_commit " \
+                "VALUES (%s, %s)"
+        arguments = [commit_id, fun_id]
+        cursor.execute(query, arguments)
+        self._cnx.commit()
+        cursor.close()
+
     def update_commit_parent(self, parent_id, parent_sha, repo_id):
         """
         inserts commit parent to DB
@@ -654,34 +826,6 @@ class GitDao():
         cursor.close()
         return found
 
-    def select_commit_id_before_date(self, sha, repo_id, before_date):
-        """
-        selects id of a commit by its SHA before a given date
-
-        :type sha: str
-        :param sha: SHA of the commit
-
-        :type repo_id: int
-        :param repo_id: id of the repository
-
-        :type before_date: timestamp
-        :param before_date: date
-        """
-        found = None
-        cursor = self._cnx.cursor()
-        query = "SELECT id " \
-                "FROM commit " \
-                "WHERE sha = %s AND repo_id = %s AND authored_date <= '" + str(before_date) + "' "
-        arguments = [sha, repo_id]
-        cursor.execute(query, arguments)
-        row = cursor.fetchone()
-
-        if row:
-            found = row[0]
-
-        cursor.close()
-        return found
-
     def select_all_developer_ids(self, repo_id):
         """
         selects all developers (committers or authors) of a given repo
@@ -693,11 +837,11 @@ class GitDao():
         cursor = self._cnx.cursor()
         query = "SELECT c.author_id " \
                 "FROM commit c JOIN repository r ON c.repo_id = r.id JOIN user u ON u.id = c.author_id " \
-                "WHERE repo_id = %s AND u.name IS NOT NULL AND u.email IS NOT NULL " \
+                "WHERE repo_id = %s " \
                 "UNION " \
                 "SELECT c.committer_id " \
                 "FROM commit c JOIN repository r ON c.repo_id = r.id JOIN user u ON u.id = c.committer_id " \
-                "WHERE repo_id = %s AND u.name IS NOT NULL AND u.email IS NOT NULL "
+                "WHERE repo_id = %s "
         arguments = [repo_id, repo_id]
         cursor.execute(query, arguments)
         row = cursor.fetchone()
@@ -710,7 +854,7 @@ class GitDao():
         cursor.close()
         return user_ids
 
-    def select_sha_commit_by_user(self, user_id, repo_id):
+    def select_sha_commit_by_user(self, user_id, repo_id, match_on="author"):
         """
         selects the SHA of the first commit (authored or committed) by a given user id
 
@@ -719,14 +863,24 @@ class GitDao():
 
         :type repo_id: int
         :param repo_id: id of the repository
+
+        :type match_on: str (author or committer)
+        :param match_on: define whether to perform the match on the author id or committer id
         """
         found = None
         cursor = self._cnx.cursor()
-        query = "SELECT sha " \
-                "FROM commit " \
-                "WHERE (author_id = %s OR committer_id = %s) AND repo_id = %s " \
-                "LIMIT 1"
-        arguments = [user_id, user_id, repo_id]
+
+        if match_on == "committer":
+            query = "SELECT sha " \
+                    "FROM commit " \
+                    "WHERE committer_id = %s AND repo_id = %s " \
+                    "LIMIT 1"
+        else:
+            query = "SELECT sha " \
+                    "FROM commit " \
+                    "WHERE author_id = %s AND repo_id = %s " \
+                    "LIMIT 1"
+        arguments = [user_id, repo_id]
         cursor.execute(query, arguments)
         row = cursor.fetchone()
 
@@ -734,3 +888,158 @@ class GitDao():
             found = row[0]
 
         return found
+
+    def select_file_changes(self, file_id, ref_id, before_date=None, patch=False, code=False):
+        """
+        get all file changes, excluding renamings for a given file within a reference
+
+        :type file_id: int
+        :param file_id: id of the file
+
+        :type ref_id: int
+        :param ref_id: id of the reference
+
+        :type before_date: str
+        :param before_date: if not null, it retrieves the changes before the given date
+
+        :type patch: bool
+        :param: patch: if True, it retrieves also the patch associate to each file change
+
+        :type code: bool
+        :param: code: if True, it retrieves also code-related information of the file (ccn, loc, commented lines, etc.)
+        """
+        found = []
+
+        before_date_selection = ""
+        if before_date:
+            before_date_selection = " AND c.authored_date <= '" + str(before_date) + "'"
+
+        patch_selection = ", NULL AS patch"
+        if patch:
+            patch_selection = ", fm.patch"
+
+        code_selection = ""
+        code_join = ""
+        if code:
+            code_selection = ", " \
+                             "IFNULL(cac.ccn, 0) AS ccn, " \
+                             "IFNULL(cac.loc, 0) AS loc, " \
+                             "IFNULL(cac.commented_lines, 0) AS commented_lines, " \
+                             "IFNULL(cac.blank_lines, 0) AS blank_lines, " \
+                             "IFNULL(cac.funs, 0) AS funs, " \
+                             "IFNULL(cac.tokens, 0) AS tokens, " \
+                             "IFNULL(cac.avg_ccn, 0) AS avg_ccn, " \
+                             "IFNULL(cac.avg_loc, 0) AS avg_loc, " \
+                             "IFNULL(cac.avg_tokens, 0) AS avg_tokens"
+            code_join = "LEFT JOIN code_at_commit cac ON cac.commit_id = c.id AND cac.file_id = f.id "
+
+        cursor = self._cnx.cursor()
+        query = "SELECT f.id, f.name, c.sha, c.message, IFNULL(ua.alias_id, c.author_id) AS author_id, " \
+                "c.authored_date, c.committed_date, fm.status, fm.additions, fm.deletions, " \
+                "fm.changes" + patch_selection + code_selection + " " \
+                "FROM file f join file_modification fm on f.id = fm.file_id " \
+                "JOIN commit c ON c.id = fm.commit_id " \
+                "JOIN commit_in_reference cin ON cin.commit_id = c.id " \
+                "JOIN reference r ON r.id = cin.ref_id " \
+                "LEFT JOIN user_alias ua ON ua.user_id = c.author_id " + code_join + " " \
+                "WHERE f.id = %s and r.id = %s" + before_date_selection
+        arguments = [file_id, ref_id]
+        cursor.execute(query, arguments)
+
+        row = cursor.fetchone()
+
+        while row:
+            file_id = row[0]
+            file_name = row[1]
+            sha = row[2]
+            message = row[3]
+            author_id = int(row[4])
+
+            authored_date = row[5]
+            committed_date = row[6]
+            status = str(row[7])
+            additions = int(row[8])
+            deletions = int(row[9])
+            changes = int(row[10])
+
+            git_data = {'sha': sha,
+                        'commit_message': message,
+                        'author_id': author_id,
+                        'authored_date': authored_date,
+                        'committed_date': committed_date,
+                        'status': status,
+                        'additions': additions,
+                        'deletions': deletions,
+                        'changes': changes,
+                        'file_name': file_name,
+                        'file_id': file_id}
+
+            patch_data = {}
+            if patch:
+                patch = str(row[11])
+                patch_data = {'patch': patch}
+
+
+            code_data = {}
+            if code:
+                ccn = int(row[12])
+                loc = int(row[13])
+                commented_lines = int(row[14])
+                blank_lines = int(row[15])
+                funs = int(row[16])
+                tokens = int(row[17])
+                avg_ccn = float(row[18])
+                avg_loc = float(row[19])
+                avg_tokens = float(row[20])
+
+                code_data = {'ccn': ccn,
+                             'loc': loc,
+                             'commented_lines': commented_lines,
+                             'blank_lines': blank_lines,
+                             'funs': funs,
+                             'tokens': tokens,
+                             'avg_ccn': avg_ccn,
+                             'avg_loc': avg_loc,
+                             'avg_tokens': avg_tokens}
+
+            found.append(dict(git_data.items() + patch_data.items() + code_data.items()))
+            row = cursor.fetchone()
+
+        cursor.close()
+
+        return found
+
+    def select_file_renamings(self, file_id, ref_id):
+        """
+        get file renamings for a given file within a reference
+
+        :type file_id: int
+        :param file_id: id of the file
+
+        :type ref_id: int
+        :param ref_id: id of the reference
+        """
+        renamings = []
+        cursor = self._cnx.cursor()
+        query = "SELECT fr.current_file_id, fr.previous_file_id, c.authored_date, c.authored_date, c.committed_date " \
+                "FROM file f JOIN file_modification fm ON f.id = fm.file_id " \
+                "JOIN commit c ON c.id = fm.commit_id " \
+                "JOIN commit_in_reference cin ON cin.commit_id = c.id " \
+                "JOIN reference r ON r.id = cin.ref_id " \
+                "JOIN file_renamed fr ON fr.file_modification_id = fm.id AND fr.current_file_id = f.id " \
+                "WHERE f.id = %s and r.id = %s AND fm.status = 'renamed';"
+        arguments = [file_id, ref_id]
+        cursor.execute(query, arguments)
+
+        row = cursor.fetchone()
+
+        while row:
+            renamings.append(row[1])
+            row = cursor.fetchone()
+
+        cursor.close()
+
+        if len(renamings) > 1:
+            self._logger.warning("The file with id " + str(file_id) + " has multiple renamings in reference " + str(ref_id) + "!")
+
+        return renamings

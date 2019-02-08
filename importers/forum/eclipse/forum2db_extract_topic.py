@@ -42,21 +42,19 @@ class EclipseTopic2Db(object):
         self._db_name = db_name
         self._forum_id = forum_id
         self._config = config
-
-        self._logging_util = LoggingUtil()
-        self._date_util = DateUtil()
-
         self._fileHandler = None
         self._logger = None
         self._querier = None
         self._dao = None
 
     def __call__(self):
-        try:
-            log_path = self._log_root_path + "-topic2db-" + str(self._interval[0]) + "-" + str(self._interval[-1])
-            self._logger = self._logging_util.get_logger(log_path)
-            self._fileHandler = self._logging_util.get_file_handler(self._logger, log_path, "info")
+        self._logging_util = LoggingUtil()
+        self._date_util = DateUtil()
+        log_path = self._log_root_path + "-topic2db-" + str(self._interval[0]) + "-" + str(self._interval[-1])
+        self._logger = self._logging_util.get_logger(log_path)
+        self._fileHandler = self._logging_util.get_file_handler(self._logger, log_path, "info")
 
+        try:
             self._querier = EclipseForumQuerier(None, self._logger)
             self._dao = EclipseForumDao(self._config, self._logger)
             self.extract()
@@ -80,13 +78,12 @@ class EclipseTopic2Db(object):
             self._dao.insert_message_attachment(url, own_id, name, extension, size, message_id)
 
     def _get_message_info(self, topic_id, message, pos):
-        # get information of topic messages
+        #get information of topic messages
         own_id = self._querier.get_message_own_id(message)
         created_at = self._date_util.get_timestamp(self._querier.get_created_at(message), "%a, %d %B %Y %H:%M")
         body = self._querier.get_message_body(message)
         author_name = self._querier.get_message_author_name(message)
-        message_id = self._dao.insert_message(own_id, pos, self._dao.get_message_type_id("reply"), topic_id, body,
-                                              None, self._dao.get_user_id(author_name), created_at)
+        message_id = self._dao.insert_message(own_id, pos, self._dao.get_message_type_id("reply"), topic_id, body, None, self._dao.get_user_id(author_name), created_at)
 
         if self._querier.message_has_attachments(message):
             self._get_message_attachments_info(message_id, message)

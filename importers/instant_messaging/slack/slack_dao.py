@@ -230,13 +230,12 @@ class SlackDao():
         try:
             cursor = self._cnx.cursor()
             query = "INSERT IGNORE INTO message " \
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            arguments = [None, own_id, pos, type, 0, 0, channel_id, body, None, author_id, created_at]
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            arguments = [None, own_id, pos, type, 0, 0, channel_id, 0, body, None, author_id, created_at]
             cursor.execute(query, arguments)
             self._cnx.commit()
         except:
-            self._logger.warning("message " + str(own_id) + ") for channel id: " + str(channel_id) + " not inserted",
-                                 exc_info=True)
+            self._logger.warning("message " + str(own_id) + ") for channel id: " + str(channel_id) + " not inserted", exc_info=True)
 
     def get_user_id(self, user_name, user_email):
         """
@@ -248,6 +247,10 @@ class SlackDao():
         :type user_email: str
         :param user_email: user email
         """
+        if user_email == None and user_name == None:
+            user_name = "unknown_user"
+            user_email = "unknown_user"
+
         if user_email:
             user_id = self._db_util.select_user_id_by_email(self._cnx, user_email, self._logger)
         else:
