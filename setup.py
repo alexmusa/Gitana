@@ -13,8 +13,7 @@ setup(
         url='https://github.com/SOM-Research/gitana',
 
         author='Valerio Cosentino',
-        author_email='valcos@bitergia.com',
-
+        author_email='valerio.cosentino@gmail.com',
         # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
         classifiers=[
             'Development Status :: 5 - Production/Stable',
@@ -33,9 +32,8 @@ setup(
         # your project is installed. For an analysis of "install_requires" vs pip's
         # requirements files see:
         # https://packaging.python.org/en/latest/requirements.html
-        install_requires=['networkx', 'gitpython', 'python-bugzilla', 'pygithub',
-                          'selenium', 'py-stackexchange', 'slacker', 'pygal',
-                          'mysql-connector-python-rf', 'beautifulsoup'],
+        install_requires=['networkx', 'mysql-connector-python-rf', 'gitpython', 'python-bugzilla', 'pygithub', 'selenium',
+                          'py-stackexchange', 'beautifulsoup', 'slacker', 'pygal', 'lizard', 'diff-match-patch'],
 
         # List additional groups of dependencies here (e.g. development
         # dependencies). You can install these using the following syntax,
@@ -54,7 +52,6 @@ setup(
             'exporters': ['exporters/resources/queries.json', 'exporters/resources/jumbotron.png'],
         },
         data_files=[('exporters/resources', ['exporters/resources/queries.json', 'exporters/resources/jumbotron.png'])]
-
         # Although 'package_data' is the preferred approach, in some case you may
         # need to place data files outside of your packages. See:
         # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
